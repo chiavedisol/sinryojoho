@@ -175,13 +175,13 @@ st.text("")
 
 
 if st.button("文章を生成します"):
-    latest_iteration = st.empty()
-    bar = st.progress(0)
-    for i in range(100):
-        latest_iteration.text(f'文章生成中です {i+1}')
-        bar.progress(i+1)
-        time.sleep(0.01)
-    st.write("下記の文章を確認のうえ使用してください")
+    # latest_iteration = st.empty()
+    # bar = st.progress(0)
+    # for i in range(100):
+    #     latest_iteration.text(f'文章生成中です {i+1}')
+    #     bar.progress(i+1)
+    #     time.sleep(0.01)
+    # st.write("下記の文章を確認のうえ使用してください")
     st.write(tegami)
 
 
