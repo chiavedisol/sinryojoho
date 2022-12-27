@@ -2,198 +2,266 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-tegami = ""
-atesaki_tegami = ""
-sinri = ""
-sinri_henka = ""
-mri = ""
-sindan = ""
+pagelist = ["診療情報提供書","精査依頼", "運転免許"]
+selector = st.sidebar.radio("ページ選択",pagelist)
+if selector=="診療情報提供書":
 
-st.title("診療情報提供書を作成します")
+    tegami = ""
+    atesaki_tegami = ""
+    sinri = ""
+    sinri_henka = ""
+    mri_artifact = ""
+    mri = ""
+    mri_follow = ""
+    sindan = ""
+    sindan_lewy = ""
+    sindan_vad = ""
+    sindan_nph = ""
+    sindan_sci = ""
+    sindan_psp = ""
+    dengon = ""
 
-conclusion = st.multiselect(
-    '診断名を入力してください',
-    ['アルツハイマー型認知症', '血管性認知症', 'レビー小体型認知症', '正常圧水頭症', '進行性核上性麻痺'],
-    ['アルツハイマー型認知症'])
+    st.title("診療情報提供書を作成します")
 
-
-kaisuu = st.text_input("何回目の検査ですか", placeholder="半角数字で入力してください", key="kaisuu")
-
-col1, col2 = st.columns(2)
-with col1:
-    kensa = st.date_input("今回の検査日程を入力してください", key="kensa")
-    kensa_d = kensa.strftime('%Y年%m月%d日')
-with col2:
-    kensa_before = st.date_input("前回の検査日程を入力してください", key="kensa_before")
-    kensa_before_d = kensa_before.strftime('%Y年%m月%d日')
-
-# with col1:
-atesaki = st.radio("どこに送付する書類ですか",
-("紹介状の返書", "かかりつけ医", "新しい通院先", "その他"), 
-horizontal=True)
-col1, col2, col3 = st.columns(3)
-with col3:
-    if atesaki == "かかりつけ医":
-        kankei = st.radio("当院との関係性", ("関係性あり", "関係性なし", "施設/訪問医あて"), 
-        horizontal=True)
-
-###########################################################################################
-########　　　　　　　冒頭のあいさつ文　　　　　　　###########################################
-###########################################################################################
-
-if kaisuu == "1":
-    if atesaki == "紹介状の返書":
-        atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。{kensa_d}に実施しました認知症の精査の結果を報告いたします。"
-    if atesaki == "かかりつけ医":
-        if kankei == "関係性なし":
-            atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がかかりつけと伺いました。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
-        if kankei == "関係性あり":
-            atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がかかりつけと伺いました。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
-        if kankei == "施設/訪問医あて":
-            atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がこの方への訪問をされているかかりつけ医と伺いました。当院での検査結果を報告させていただきます。"
-    if atesaki == "新しい通院先":
-        atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診された方です({kensa_d}初診)。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
-
-if kaisuu != "1":
-    if atesaki == "かかりつけ医":
-        if kankei == "関係性なし":
-            atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診されている方です。唐突にご連絡させていただく失礼をお許しください。{kensa_d}に{kaisuu}回目の認知症精査を実施しましたので、検査結果を報告させていただきます。"
-        if kankei == "関係性あり":
-            atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。{kensa_d}に{kaisuu}回目の認知症精査を実施しましたので、検査結果を報告させていただきます。"
-    if atesaki == "新しい通院先":
-        atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診されている方です。今後は先生がかかりつけになると伺いました。唐突にご連絡させていただく失礼をお許しください。{kensa_d}に{kaisuu}回目の認知症精査を実施しておりますので、検査結果を報告させていただきます。"
-
-shohou = st.radio("処方依頼について",
-("初回", "継続", "減量", "増量", "追加"), 
-horizontal=True)
-
-okure = st.checkbox("報告が遅れた場合にはチェックしてください")
-
-if okure == True:
-    if atesaki == "紹介状の返書":
-        atesaki_tegami += "この度は大変ご丁寧な診療情報提供書をいただいていたにも関わらず、返信が間延びをしてしまい、大変申し訳ありませんでした。心よりお詫び申し上げます。"
-    if atesaki == "かかりつけ医":
-        atesaki_tegami += "結果の報告が遅くなりましたこと大変申し訳ございません。"
-
-# kekka = st.radio("結果について",
-# ("初診", "精査", "MRA"), 
-# horizontal=True)
-
-kekka = st.checkbox("MRA結果のみを報告する場合はチェックしてください")
-irai = st.checkbox("結果説明を他院に依頼する場合はチェックしてください")
+    conclusion = st.multiselect(
+        '診断名を入力してください',
+        ['アルツハイマー型認知症', '血管性認知症', 'レビー小体型認知症', '正常圧水頭症', 'MCI/SCI','進行性核上性麻痺'],
+        ['アルツハイマー型認知症'])
 
 
-st.text("")
-st.text("")
+    kaisuu = st.text_input("何回目の検査ですか", placeholder="半角数字で入力してください", key="kaisuu")
 
-col1, col2 = st.columns(2)
-with col1:
-    alicept = st.text_input("アリセプトの内服量を入力してください", placeholder="「mg」は不要です", key="alicept")
-with col2:
-    donepezil = st.text_input("ドネペジルの内服量を入力してください", placeholder="「mg」は不要です", key="donepezil")
+    col1, col2 = st.columns(2)
+    with col1:
+        kensa = st.date_input("今回の検査日程を入力してください", key="kensa")
+        kensa_d = kensa.strftime('%Y年%m月%d日')
+    with col2:
+        kensa_before = st.date_input("前回の検査日程を入力してください", key="kensa_before")
+        kensa_before_d = kensa_before.strftime('%Y年%m月%d日')
 
-col1, col2 = st.columns(2)
-with col1:
-    memary = st.text_input("メマリーの内服量を入力してください", placeholder="「mg」は不要です", key="memary")
-with col2:
-    memantine = st.text_input("メマンチンの内服量を入力してください", placeholder="「mg」は不要です", key="memantine")
+    # with col1:
+    atesaki = st.radio("どこに送付する書類ですか",
+    ("紹介状の返書", "かかりつけ医", "新しい通院先", "その他"), 
+    horizontal=True)
+    col1, col2, col3 = st.columns(3)
+    with col3:
+        if atesaki == "かかりつけ医":
+            kankei = st.radio("当院との関係性", ("関係性あり", "関係性なし", "施設/訪問医あて"), 
+            horizontal=True)
 
-st.text("")
-st.text("")
+    ###########################################################################################
+    ########　　　　　　　冒頭のあいさつ文　　　　　　　###########################################
+    ###########################################################################################
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    hdsr = st.text_input("HDS-Rの点数", placeholder="「点」は不要です", key="hdsr")
-with col2:
-    hdsr_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="hdsr_difference")
-with col3:
-    hdsr_direction = st.selectbox("変動の方向性", ("","上昇", "低下"), key="hdsr_direction")
+    if kaisuu == "1":
+        if atesaki == "紹介状の返書":
+            atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。{kensa_d}に実施しました認知症の精査の結果を報告いたします。"
+        if atesaki == "かかりつけ医":
+            if kankei == "関係性なし":
+                atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がかかりつけと伺いました。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
+            if kankei == "関係性あり":
+                atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がかかりつけと伺いました。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
+            if kankei == "施設/訪問医あて":
+                atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診された方です({kensa_d}初診)。先生がこの方への訪問をされているかかりつけ医と伺いました。当院での検査結果を報告させていただきます。"
+        if atesaki == "新しい通院先":
+            atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診された方です({kensa_d}初診)。唐突にご連絡させていただく失礼をお許しください。当院での検査結果を報告させていただきます。"
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    mmse = st.text_input("MMSEの点数", placeholder="「点」は不要です", key="mmse")
-with col2:
-    mmse_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="mmse_difference")
-with col3:
-    mmse_direction = st.selectbox("変動の方向性", ("","上昇", "低下"), key="mmse_direction")
+    if kaisuu != "1":
+        if atesaki == "かかりつけ医":
+            if kankei == "関係性なし":
+                atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診されている方です。唐突にご連絡させていただく失礼をお許しください。{kensa_d}に{kaisuu}回目の認知症精査を実施しましたので、検査結果を報告させていただきます。"
+            if kankei == "関係性あり":
+                atesaki_tegami = f"先生にはいつも大変お世話になっており、どうもありがとうございます。{kensa_d}に{kaisuu}回目の認知症精査を実施しましたので、検査結果を報告させていただきます。"
+        if atesaki == "新しい通院先":
+            atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診されている方です。今後は先生がかかりつけになると伺いました。唐突にご連絡させていただく失礼をお許しください。{kensa_d}に{kaisuu}回目の認知症精査を実施しておりますので、検査結果を報告させていただきます。"
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    adas = st.text_input("ADASの点数", placeholder="「点」は不要です", key="adas")
-with col2:
-    adas_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="adas_difference")
-with col3:
-    adas_direction = st.selectbox("変動の方向性", ("","改善", "悪化"), key="adas_direction")
+    shohou = st.radio("処方依頼について",
+    ("初回", "継続", "減量", "増量", "追加"), 
+    horizontal=True)
 
-cesd = st.text_input("CES-Dの点数", placeholder="「点」は不要です", key="cesd")
-sdidlb = st.text_input("SDI-DLBの点数", placeholder="「点」は不要です", key="sdidlb")
+    okure = st.checkbox("報告が遅れた場合にはチェックしてください")
 
-col1, col2, col3, col4, col5 = st.columns(5)
-with col1:
-    gengo = st.text_input("言語性記憶", placeholder="WMS-R", key="gengo")
-with col2:
-    sikaku = st.text_input("視覚性記憶", placeholder="WMS-R", key="sikaku")
-with col3:
-    ippan = st.text_input("一般的記憶", placeholder="WMS-R", key="ippan")
-with col4:
-    tyuui = st.text_input("注意力", placeholder="WMS-R", key="tyuui")
-with col5:
-    tien = st.text_input("遅延再生", placeholder="WMS-R", key="tien")
+    if okure == True:
+        if atesaki == "紹介状の返書":
+            atesaki_tegami += "この度は大変ご丁寧な診療情報提供書をいただいていたにも関わらず、返信が間延びをしてしまい、大変申し訳ありませんでした。心よりお詫び申し上げます。"
+        if atesaki == "かかりつけ医":
+            atesaki_tegami += "結果の報告が遅くなりましたこと大変申し訳ございません。"
 
-sinri = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、認知機能は見当識、記憶、とりわけ遅延再生領域において明瞭な低下を認めました。"
-sinri = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、認知機能は見当識、記憶、遅延再生、語想起の領域においてそれぞれ少しずつ低下を認めました。"
-sinri = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
-sinri = f"また、SDI-DLB(レビー小体型認知症のスケール、16点以上でDLB疑い)は{sdidlb}/80でDLBが疑われました。"
+    # kekka = st.radio("結果について",
+    # ("初診", "精査", "MRA"), 
+    # horizontal=True)
 
-sinri = f"簡易神経心理検査（HDS-R、MMSE）が高得点なためWMS-R記憶検査を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、【△、△の指標は平均-1SDを下回りました。なかでも△、△の指標は平均-2SDを下回りました。／平均-1SDを下回った指標はありませんでした。】【△と△の指標間乖離がみられました。】【なお、指標算出を70-74歳基準によっており、ご本人の年齢と比較すると値が低く出ている可能性があります。】【そのため認知症と診断しました。／軽度認知障害と診断しました。／積極的に認知症と診断できませんでした。】"
-
-sinri = f"簡易神経心理検査（HDS-R、MMSE）が高得点なためWMS-R記憶検査およびTMT（Trail Making Test：注意機能をみる）を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、【△、△の指標は平均-1SDを下回りました。なかでも△、△の指標は平均-2SDを下回りました。／平均-1SDを下回った指標はありませんでした。】【△と△の指標間乖離がみられました。】【なお、指標算出を70-74歳基準によっており、ご本人の年齢と比較すると値が低く出ている可能性があります。】TMTにおいて、【PartAの遂行がスムーズであったのに対し、より難しいPartBでは自己修正されないエラーが生じ遂行の遅延がみられました。／遂行はスムーズであり問題は認められませんでした。】【そのため認知症と診断しました。／軽度認知障害と診断しました。／積極的に認知症と診断できませんでした。】"
-
-sinri_henka = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で認知機能は見当識、記憶、とりわけ遅延再生領域において明瞭な低下を認めました。{kensa_before_d}実施と比べそれぞれ、{hdsr_difference}点の{hdsr_direction}、{mmse_difference}点の{mmse_direction}でした。ADAS(抗認知症薬の効果測定)は{adas}/70で{adas_difference}点の{adas_direction}でした。"
-sinri_henka = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、{kensa_before_d}実施と比べそれぞれ、HDS-Rは{hdsr_difference}点の{hdsr_direction}、MMSEについては変化がありませんでした。ADAS(抗認知症薬の効果測定)は{adas}/70で{adas_difference}点の{adas_direction}でした。"
-
-mri = st.text_area("MRI所見を入力してください", key=mri)
-mri = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
-    .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
+    kekka = st.checkbox("MRA結果のみを報告する場合はチェックしてください")
+    irai = st.checkbox("結果説明を他院に依頼する場合はチェックしてください")
 
 
-sindan = f"従いまして、画像上海馬の萎縮は明瞭ではありませんが、神経心理検査上、近時記憶の明瞭な低下を認め、現時点では特異的な症候を見出せず、アルツハイマー型認知症と診断させていただきました。"
-sindan = f"中脳被蓋の萎縮や第三脳室拡大、第四脳室拡大もある印象です。進行性核上性麻痺、基底核変性症なども疑えますが、特異的な症候を見いだせておりませんので、現時点ではアルツハイマー型認知症としております。"
+    st.text("")
+    st.text("")
 
-sindan_lewy = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでした。また、歩行状態の不安定さ、明らかな幻視、レム睡眠行動障害と思われる報告があり、神経心理検査上からもレビー小体型認知症が疑われ、現時点では、アルツハイマー型認知症とレビー小体型認知症の合併と診断させていただきました。"
-sindan_lewy = f"画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では、特異的な症候を見出せず、記憶障害よりアルツハイマー型認知症、神経心理検査の結果、注意力低下と気分障害を中心としたレビー小体型認知症と考えることができます。これらの合併型と診断させていただきました。"
+    col1, col2 = st.columns(2)
+    with col1:
+        alicept = st.text_input("アリセプトの内服量を入力してください", placeholder="「mg」は不要です", key="alicept")
+    with col2:
+        donepezil = st.text_input("ドネペジルの内服量を入力してください", placeholder="「mg」は不要です", key="donepezil")
 
-sindan_vad = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では特異的な症候を見出せず、アルツハイマー型認知症と、また◯◯に多発する◯◯を考慮し、血管性認知症との混合型と診断させていただきました。"
-sindan_vad = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では、特異的な症候を見出せず、右被殻、左視床の出血後変化、広範囲にわたる脳梗塞とあわせて、アルツハイマー型認知症と血管性認知症と診断させていただきました。"
+    col1, col2 = st.columns(2)
+    with col1:
+        memary = st.text_input("メマリーの内服量を入力してください", placeholder="「mg」は不要です", key="memary")
+    with col2:
+        memantine = st.text_input("メマンチンの内服量を入力してください", placeholder="「mg」は不要です", key="memantine")
 
-sindan_nph = f"頭頂部脳溝が狭く、それに比べて脳室全体が拡大しており、正常圧水頭症の可能性も否定できませんが現時点でタップテストのメルクマールとなるような認知機能低下以外の特異的症状（magnetic gaitやincontinence）や失禁の出現が乏しく判断に窮します。そのため正常圧水頭症疑いとさせていただきました。"
+    st.text("")
+    st.text("")
 
-tegami = atesaki_tegami + "\n" + "\n" + sinri + sinri_henka + "\n" + "\n" + mri
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        hdsr = st.text_input("HDS-Rの点数", placeholder="「点」は不要です", key="hdsr")
+    with col2:
+        hdsr_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="hdsr_difference")
+    with col3:
+        hdsr_direction = st.selectbox("変動の方向性", ("","上昇", "低下"), key="hdsr_direction")
 
-st.text("")
-st.text("")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        mmse = st.text_input("MMSEの点数", placeholder="「点」は不要です", key="mmse")
+    with col2:
+        mmse_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="mmse_difference")
+    with col3:
+        mmse_direction = st.selectbox("変動の方向性", ("","上昇", "低下"), key="mmse_direction")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        adas = st.text_input("ADASの点数", placeholder="「点」は不要です", key="adas")
+    with col2:
+        adas_difference = st.text_input("前回からの変化量", placeholder="「点」は不要です", key="adas_difference")
+    with col3:
+        adas_direction = st.selectbox("変動の方向性", ("","改善", "悪化"), key="adas_direction")
+
+    cesd = st.text_input("CES-Dの点数", placeholder="「点」は不要です", key="cesd")
+    sdidlb = st.text_input("SDI-DLBの点数", placeholder="「点」は不要です", key="sdidlb")
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col1:
+        gengo = st.text_input("言語性記憶", placeholder="WMS-R", key="gengo")
+    with col2:
+        sikaku = st.text_input("視覚性記憶", placeholder="WMS-R", key="sikaku")
+    with col3:
+        ippan = st.text_input("一般的記憶", placeholder="WMS-R", key="ippan")
+    with col4:
+        tyuui = st.text_input("注意力", placeholder="WMS-R", key="tyuui")
+    with col5:
+        tien = st.text_input("遅延再生", placeholder="WMS-R", key="tien")
+
+    sinri = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、認知機能は見当識、記憶、とりわけ遅延再生領域において明瞭な低下を認めました。"
+    sinri = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、認知機能は見当識、記憶、遅延再生、語想起の領域においてそれぞれ少しずつ低下を認めました。"
+    sinri = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
+    sinri = f"また、SDI-DLB(レビー小体型認知症のスケール、16点以上でDLB疑い)は{sdidlb}/80でDLBが疑われました。"
+
+    sinri = f"簡易神経心理検査（HDS-R、MMSE）が高得点なためWMS-R記憶検査を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、【△、△の指標は平均-1SDを下回りました。なかでも△、△の指標は平均-2SDを下回りました。／平均-1SDを下回った指標はありませんでした。】【△と△の指標間乖離がみられました。】【なお、指標算出を70-74歳基準によっており、ご本人の年齢と比較すると値が低く出ている可能性があります。】【そのため認知症と診断しました。／軽度認知障害と診断しました。／積極的に認知症と診断できませんでした。】"
+
+    sinri = f"簡易神経心理検査（HDS-R、MMSE）が高得点なためWMS-R記憶検査およびTMT（Trail Making Test：注意機能をみる）を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、【△、△の指標は平均-1SDを下回りました。なかでも△、△の指標は平均-2SDを下回りました。／平均-1SDを下回った指標はありませんでした。】【△と△の指標間乖離がみられました。】【なお、指標算出を70-74歳基準によっており、ご本人の年齢と比較すると値が低く出ている可能性があります。】TMTにおいて、【PartAの遂行がスムーズであったのに対し、より難しいPartBでは自己修正されないエラーが生じ遂行の遅延がみられました。／遂行はスムーズであり問題は認められませんでした。】【そのため認知症と診断しました。／軽度認知障害と診断しました。／積極的に認知症と診断できませんでした。】"
+
+    sinri_henka = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で認知機能は見当識、記憶、とりわけ遅延再生領域において明瞭な低下を認めました。{kensa_before_d}実施と比べそれぞれ、{hdsr_difference}点の{hdsr_direction}、{mmse_difference}点の{mmse_direction}でした。ADAS(抗認知症薬の効果測定)は{adas}/70で{adas_difference}点の{adas_direction}でした。"
+    sinri_henka = f"神経心理検査上、HDS-R{hdsr}/30、MMSE{mmse}/30で、{kensa_before_d}実施と比べそれぞれ、HDS-Rは{hdsr_difference}点の{hdsr_direction}、MMSEについては変化がありませんでした。ADAS(抗認知症薬の効果測定)は{adas}/70で{adas_difference}点の{adas_direction}でした。"
+
+    mri_artifact = f"頭部単純MRIは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）"
+
+    mri = st.text_area("MRI所見を入力してください", key="mri")
+    mri = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
+        .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        mri_shukketu = st.checkbox(f"出血フォロー有り")
+    with col2:
+        mri_kousoku = st.checkbox(f"梗塞フォロー有り")
+    with col3:
+        mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り")
+    if mri_shukketu or mri_kousoku or mri_koumakuka is True:
+        with col3:
+            follow = st.date_input("フォロー検査日程", key="follow")
+            follow_d = follow.strftime('%Y年%m月%d日')
+
+    mri_follow = f"{follow_d}に再度頭部頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。"
+
+    sindan = f"従いまして、画像上海馬の萎縮は明瞭ではありませんが、神経心理検査上、近時記憶の明瞭な低下を認め、現時点では特異的な症候を見出せず、アルツハイマー型認知症と診断させていただきました。"
+    sindan = f"中脳被蓋の萎縮や第三脳室拡大、第四脳室拡大もある印象です。進行性核上性麻痺、基底核変性症なども疑えますが、特異的な症候を見いだせておりませんので、現時点ではアルツハイマー型認知症としております。"
+
+    sindan_lewy = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでした。また、歩行状態の不安定さ、明らかな幻視、レム睡眠行動障害と思われる報告があり、神経心理検査上からもレビー小体型認知症が疑われ、現時点では、アルツハイマー型認知症とレビー小体型認知症の合併と診断させていただきました。"
+    sindan_lewy = f"画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では、特異的な症候を見出せず、記憶障害よりアルツハイマー型認知症、神経心理検査の結果、注意力低下と気分障害を中心としたレビー小体型認知症と考えることができます。これらの合併型と診断させていただきました。"
+
+    sindan_vad = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では特異的な症候を見出せず、アルツハイマー型認知症と、また◯◯に多発する◯◯を考慮し、血管性認知症との混合型と診断させていただきました。"
+    sindan_vad = f"従いまして、画像上アルツハイマー型認知症及び高齢者タウオパチーとして矛盾ありませんでしたが、現時点では、特異的な症候を見出せず、右被殻、左視床の出血後変化、広範囲にわたる脳梗塞とあわせて、アルツハイマー型認知症と血管性認知症と診断させていただきました。"
+
+    sindan_nph = f"頭頂部脳溝が狭く、それに比べて脳室全体が拡大しており、正常圧水頭症の可能性も否定できませんが現時点でタップテストのメルクマールとなるような認知機能低下以外の特異的症状（magnetic gaitやincontinence）や失禁の出現が乏しく判断に窮します。そのため正常圧水頭症疑いとさせていただきました。"
+
+    sindan_sci = f"従いまして、今回の検査では、画像上、神経心理検査上においても積極的に認知症であることを支持する所見は得られませんでした。そのため自覚的な認知機能低下のみということで、診断名は現時点ではSCI（主観的認知機能低下、subjective coginitive impairment）ということに留まると愚考いたしました。"
+
+    sindan_psp = f"Rivermead（行動記憶検査）標準ﾌﾟﾛﾌｨｰﾙ合計点:[〇/24点] (cutoff:15/16）、ｽｸﾘｰﾆﾝｸﾞ合計点:[〇/12点] (cutoff:5/6) で、標準プロフィール合計点、スクリーニング合計点のいずれも正常域下限であり、完全に保持できた項目と全く覚えていなかった項目が混在し、記銘力に若干ムラがある様子が伺えました。従いまして、神経心理検査の結果や上下注視制限、またご指摘のような繰り返す転倒、歩きにくさ、反応の遅さ等の臨床所見を踏まえまして、現時点では進行性核上性麻痺と診断させていただきました。今後につきましては、薬の調整等を試みようと思っております。"
+
+    setumei = st.date_input("結果説明の日程を入力してください", key="setumei")
+    setumei_d = setumei.strftime('%Y年%m月%d日')
+
+    setumei_irai = f"当院へは遠方のため来院の負担があり、ご本人とご家族の希望もあり、上記の検査結果については、大変お忙しい中厚かましいお願いで誠に恐縮ですが、先生からお伝えいただければ誠にありがたく存じます。大変お手を煩わせて申し訳ありません。なにかご不明な点がございましたら、ご連絡いただければ誠にありがたく存じます。"
+
+    shohou_touin = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。ご本人ご家族が抗認知症薬（アリセプト）の服薬を希望されましたので、本日アリセプト3mg1錠を処方させていただきました。食欲不振・下痢など消化器症状の副作用のモニタリングを行い、問題がないようであれば5mgへ増量する予定です。"
+    shohou_yokoku = f"服薬が安定しましたところで、改めてご連絡させていただきます。その際には、アリセプト等の抗認知症薬の処方につきましては、先生から合わせてご処方をご検討賜れれば誠にありがたく存じます。大変お忙しいところに、また誠に厚かましいお願いをしてしまい大変恐縮です。どうかご寛恕いただけますならば幸甚です。"
+    shohou_kakarituke = f"アリセプト5mgにつきまして、現在、食欲不振・下痢などの消化器症状の副作用はなく安定して服薬されております。今後につきましては、先生からあわせてアリセプト5ｍｇ1T1Xのご処方をご検討賜れれば幸甚です。大変お忙しいところに、また誠に厚かましいお願いをしてしまい大変恐縮です。どうかご寛恕いただけますならば幸甚です。"
+    shohou_kaisiirai = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。大変不躾で本当に申し訳なく思います。アリセプト等の抗認知症薬の処方（たとえばアリセプトであれば血中の半減期が70-80時間であるため、副作用のチェックに3mg錠1T1Xで2-3週間、問題なければ5mg錠に増量など）については、先生から合わせてご処方をご検討賜れれば誠にありがたく存じます。"
 
 
-if st.button("文章を生成します"):
-    # latest_iteration = st.empty()
-    # bar = st.progress(0)
-    # for i in range(100):
-    #     latest_iteration.text(f'文章生成中です {i+1}')
-    #     bar.progress(i+1)
-    #     time.sleep(0.01)
-    # st.write("下記の文章を確認のうえ使用してください")
-    st.write(tegami)
+    dengon = st.text_area("医師への伝言があればここに記載をお願いします", key="dengon")
+    dengon = "★★★★★★★★★★★★★★★★" + dengon + "★★★★★★★★★★★★★★★★" 
+
+    tegami = atesaki_tegami + "\n" + "\n" + sinri + sinri_henka + "\n" + mri + sindan + sindan_vad + sindan_lewy + sindan_nph + "\n" + dengon 
 
 
-button_css = f"""
-<style>
-  div.stButton > button:first-child  {{
-    font-weight  : bold                ;/* 文字：太字                   */
-    border       :  5px solid #f36     ;/* 枠線：ピンク色で5ピクセルの実線 */
-    border-radius: 10px 10px 10px 10px ;/* 枠線：半径10ピクセルの角丸     */
-    background   : #ddd                ;/* 背景色：薄いグレー            */
-  }}
-</style>
-"""
-st.markdown(button_css, unsafe_allow_html=True)
 
+    st.text("")
+    st.text("")
+
+
+    if st.button("文章を生成します"):
+        # latest_iteration = st.empty()
+        # bar = st.progress(0)
+        # for i in range(100):
+        #     latest_iteration.text(f'文章生成中です {i+1}')
+        #     bar.progress(i+1)
+        #     time.sleep(0.01)
+        # st.write("下記の文章を確認のうえ使用してください")
+        st.write(tegami)
+
+
+    button_css = f"""
+    <style>
+    div.stButton > button:first-child  {{
+        font-weight  : bold                ;/* 文字：太字                   */
+        border       :  5px solid #f36     ;/* 枠線：ピンク色で5ピクセルの実線 */
+        border-radius: 10px 10px 10px 10px ;/* 枠線：半径10ピクセルの角丸     */
+        background   : #ddd                ;/* 背景色：薄いグレー            */
+    }}
+    </style>
+    """
+    st.markdown(button_css, unsafe_allow_html=True)
+
+if selector=="精査依頼":
+
+    st.title("他院に精査を依頼します")
+    atesaki = st.radio("精査を依頼する疾患名を入力してください",
+    ('レビー小体型認知症', '正常圧水頭症', '脳腫瘍', '脳動脈瘤', '精神科入院依頼', '進行性核上性麻痺'), 
+    horizontal=True)
+
+    nph_irai = f"いつも大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診している方です（平成〇年〇月〇日初診）。初診時頭部単純MRI撮影を実施したところ、両側側脳室、第三脳室拡大が目立ち、一方で頭頂部含めて脳溝は狭い印象があり、正常圧水頭症を疑わせる所見がありました。尿失禁、歩行困難も認められました。もともと歩くのが好きな方で、少しでも歩ける可能性があるのであれば、その可能性についてご検討いただきたいと本人、ご家族のご希望がありました。お忙しいところ誠に恐縮ですが、貴科的精査ご高診賜りますようお願いいたします。今後ともどうぞご指導賜りますようお願い申し上げます。"
+    shuyou_irai = f"いつも大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院受診されている方です（平成〇年〇月〇日初診）。頭部単純MRI撮影を実施したところ、左側脳室前角の部位に一致して、約〇mm大の腫瘤状構造物疑う所見がありました。お忙しいところ誠に恐縮ですが、貴科的精査ご高診賜りますようお願いいたします。今後ともどうぞご指導賜りますようお願い申し上げます。"
+    doumyakuryu_irai = f"いつも大変お世話になっており、どうもありがとうございます。認知症の精査目的で当院を受診されている方です(平成〇年〇月〇日初診)。平成〇年〇月〇日MRA撮像を実施いたしましたところ、〇〇に約〇mm大の瘤状構造があり動脈瘤を疑われました。お忙しいところ急なお願いで誠に恐縮ですが、貴科的精査ご高診賜わりますようお願い申し上げます。今後ともどうぞご指導賜りますようお願い申し上げます。"
+    nyuin_irai = f"せん妄があり、リスパダール（一時はアリセプトもあわせて）を調整しつつ自宅療養を続けてまいりました。このところ活動性のせん妄（一日中ベッドの周りをうろうろする（akathisiaかもしれません）、妻や子に殴りかかる、大声で叫ぶなどが頻発し、同居の妻は目が離せない状態で、かなり疲弊し在宅生活が限界にあります。外来通院についても本年に入りご本人と奥さんはこられず、息子さんのみが来られる状況です。このたびは突然のお願いで、大変お忙しい中誠に恐縮に存じます。何卒入院の上ご高診ご加療のご検討を賜れれば幸甚です。今後ともどうかご指導賜りますようお願い申し上げます。"
+    nyuin_irai = f"受診される数日前より、急激に記憶障害が出現し、認知症の精査を希望され受診にいたりました。気分障害に対して前医よりデパス、ドグマチール、アーテンが処方されていました。奏功がしていないようで服用を中止しました。本日受診された際、食欲不振、不眠が出現したとの報告がありました。ご家族が、現状の介護について「これ以上もう無理」と強くその限界について訴えておられ、入院加療を強く希望されています。お忙しいところ誠に恐縮ですが、何卒入院の上、貴科的精査ご高診賜りますようお願いいたします。今後ともどうぞご指導賜りますようお願い申し上げます。"
+
+    sankou = f"当院での検査結果をご参考まで添付いたします。神経心理検査上、HDS-R〇/30、MMSE〇/30で、認知機能は見当識、記憶、とりわけ遅延再生領域において明瞭な低下を認めました。頭部単純MRI上、１．〇〇〇。２．〇〇〇。当院では力不足からタップテストは未実施です。"
+
+if selector=="運転免許":
+
+    st.title("運転免許の更新が難しい場合")
+
+    menkyo = f"平成〇年〇月〇日、ご本人と奥様に上記の内容と運転免許の更新は難しいことをお伝えしました。運転免許証の自主返納をお勧めしましたが、思いもよらない結果だったご様子で、私の力不足もあり、ご本人は茫然とされ奥様は怒りを露わにされておりました。先生にご迷惑が及ぶことを恐れます。大変申し訳ありませんでした。運転免許証の自主返納（少しだけ特典があるようです）を何度かお勧めしましたが、今後の事をご本人がその場で判断することはできず、診断書を作成してお渡ししました。お渡しした診断書を添付いたします。この度はご紹介賜り誠にありがとうございます。なにかご不明点あればご連絡賜れれば幸甚です。今後ともご指導賜りますようお願い申し上げます。"
+    menkyo = f"平成〇年〇月〇日、ご本人に上記の内容と運転免許の更新は不能であることをお伝えしました。診断書を発行するよりも、メリットがあるかもしれない運転免許証の自主返納をお勧めしました。また抗認知症薬の効果・副作用について説明しましたところ抗認知症薬の服薬を希望されましたので、アリセプト3mg1錠１X１朝14日分を処方させていただきました。食欲不振・下痢などの消化器症状などの副作用のモニタリングを行い、問題がないようであれば、5mgへ増量する予定です。服薬が副作用なく安定しましたところで、先生から合わせてご処方いただければ誠にありがたく存じます。"
