@@ -17,6 +17,7 @@ if selector=="診療情報提供書":
     mri_artifact = ""
     mri = ""
     mri_hankaku = ""
+    henka_nasi = ""
     mri_follow = ""
     sindan = ""
     sindan_vad = ""
@@ -264,7 +265,7 @@ if selector=="診療情報提供書":
     if wmsr_comment != "":
         if tmt == False:
             sinri = ""
-            sinri_wmsr = f"簡易神経心理検査（HDS-R{hdsr}/30、MMSE{mmse}/30）が高得点なためWMS-R記憶検査を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、●●●●●●●●●●●●●●●●{wmsr_comment}●●●●●●●●●●●●●●●●"
+            sinri_wmsr = f"簡易神経心理検査（HDS-R{hdsr}/30、MMSE{mmse}/30）が高得点なためWMS-R記憶検査を実施いたしました。WMS-R指標（平均100, SD15）上、言語性記憶 {gengo}、視覚性記憶 {sikaku}、一般的記憶 {ippan}、注意/集中力 {tyuui}、遅延再生 {tien}で、{wmsr_comment}。"
         if tmt == True:
             sinri = ""
             sinri_wmsr = ""
@@ -300,6 +301,8 @@ if selector=="診療情報提供書":
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
     keiji_henka = st.checkbox("画像所見に経時的な変化はありましたか")
+    if keiji_henka == False:
+        henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
 
     artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか")
     mri_artifact = f"頭部単純MRIでは、"
@@ -719,7 +722,7 @@ if selector=="診療情報提供書":
     ########　　　　　　　最終出力　　　　　　　　　　　###########################################
     ###########################################################################################
 
-    tegami = atesaki_tegami + "\n" + "\n" + sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + mri_artifact + mri_hankaku + mri_follow + "\n" + sindan + sindan_vad + sindan_lewy + sindan_nph  + sindan_mci + sindan_sci + sindan_psp + "\n" + kaishaku + setumei_naiyou + shohou_touin + shohou_irai + vitamin + antiplt + keizoku_soudan + senmou_soudan + risperdal_soudan + gezai_soudan + ketuatu_tyuui + dengon + "\n" + "\n" + musubi
+    tegami = atesaki_tegami + "\n" + "\n" + sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + mri_artifact + mri_hankaku + henka_nasi + mri_follow + "\n" + sindan + sindan_vad + sindan_lewy + sindan_nph  + sindan_mci + sindan_sci + sindan_psp + "\n" + kaishaku + setumei_naiyou + shohou_touin + shohou_irai + vitamin + antiplt + keizoku_soudan + senmou_soudan + risperdal_soudan + gezai_soudan + ketuatu_tyuui + dengon + "\n" + "\n" + musubi
 
     st.write("")
     st.write("")
