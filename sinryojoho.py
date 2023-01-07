@@ -249,10 +249,11 @@ if selector=="診療情報提供書":
         tien = st.text_input("遅延再生", placeholder="WMS-R", key="tien")
 
     wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", key="wmsr_comment")
+    wmsr_comment = wmsr_comment.replace("\n" , "")
     tmt = st.checkbox("TMT実施済みの場合にはチェックしてください")
 
     if kaisuu == "1":
-        sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、記憶、遅延再生、語想起、とりわけ遅延再生領域において認知機能の低下を認めました。●●●●●●●●●●●●●●●●下位項目の評価を確認してください●●●●●●●●●●●●●●●●"
+        sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、記憶、語想起、とりわけ遅延再生領域において認知機能の低下を認めました。"
         if cesd != "":
             if int(cesd) >= 16:
                 sinri_cesd = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
