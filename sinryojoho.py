@@ -234,7 +234,7 @@ if selector=="診療情報提供書":
             adas_direction = f"{adas_difference}点の悪化"
         st.write("ADASの変化量")
         st.write(adas_direction)
-    hantei = st.checkbox("上記の検査結果はADAS曲線(natural course)を上回りますか")
+    hantei = st.checkbox("上記の検査結果はADAS曲線の natural courseを上回りますか")
     
     st.write("")
     st.write("")
