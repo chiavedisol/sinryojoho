@@ -214,7 +214,7 @@ if selector=="診療情報提供書":
     with col1:
         adas = st.text_input("ADASの点数", placeholder="「点」は不要です", key="adas")
     with col2:
-        adas_before = st.text_input("前回adasの点数", placeholder="「点」は不要です", key="adas_difference")
+        adas_before = st.text_input("前回ADASの点数", placeholder="「点」は不要です", key="adas_difference")
         if adas == "":
             adas_difference = ""
         elif adas_before == "":
