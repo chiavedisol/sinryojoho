@@ -554,23 +554,23 @@ if selector=="診療情報提供書":
     if donepezil != "":
         naifuku_genkou += f"ドネペジル{donepezil}mgおよび"
     if memary != "":
-        naifuku_genkou += f"メマリー{memary}mg"
+        naifuku_genkou += f"メマリー{memary}mgおよび"
     if memantine != "":
         naifuku_genkou += f"メマンチン{memantine}mg"
     naifuku_genkou = naifuku_genkou.rstrip("および")
 
     is_alicept = ""
     if alicept != "":
-        naifuku_genkou += f"アリセプト{alicept}mgおよび"
+        is_alicept += f"アリセプト{alicept}mgおよび"
     if donepezil != "":
-        naifuku_genkou += f"ドネペジル{donepezil}mgおよび"
+        is_alicept += f"ドネペジル{donepezil}mg"
     is_alicept = is_alicept.rstrip("および")
 
     is_memary = ""
     if memary != "":
-        naifuku_genkou += f"メマリー{memary}mgおよび"
+        is_memary += f"メマリー{memary}mgおよび"
     if memantine != "":
-        naifuku_genkou += f"メマンチン{memantine}mgおよび"
+        is_memary += f"メマンチン{memantine}mg"
     is_alicept = is_alicept.rstrip("および")
 
     ###########################################################################################
