@@ -308,8 +308,8 @@ if selector=="診療情報提供書":
     mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
-    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「あれば」チェックしてください")
-    if keiji_henka == False:
+    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「無い」場合はチェックしてください")
+    if keiji_henka == True:
         henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
 
     artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか")
@@ -369,9 +369,12 @@ if selector=="診療情報提供書":
     mra_hankaku = mra.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
-    keiji_henka_mra = st.checkbox("MRA画像所見に経時的な変化が「あれば」チェックしてください")
-    if keiji_henka_mra == False:
-        henka_nasi_mra = f"これら画像所見に経時的変化は明らかではありませんでした。"
+    keiji_henka_mra = st.checkbox("MRA画像所見に経時的な変化が「無い」場合はチェックしてください")
+    if keiji_henka_mra == True:
+        if "2." in mra_hankaku:
+            henka_nasi_mra = f"これら画像所見に経時的変化は明らかではありませんでした。"
+        else:
+            henka_nasi_mra = f"この画像所見に経時的変化は明らかではありませんでした。"
 
     is_artifact = st.checkbox("MRA画像にアーチファクトの混入はありましたか")
     mra_artifact = f"頭部MRAでは、"
