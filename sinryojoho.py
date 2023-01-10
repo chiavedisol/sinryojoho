@@ -736,7 +736,7 @@ if selector=="診療情報提供書":
         #     bar.progress(i+1)
         #     time.sleep(0.01)
         # st.write("下記の文章を確認のうえ使用してください")
-        st.write(tegami)
+        st.text_area("診療情報提供書", value=tegami, placeholder="診療情報提供書", height=800, label_visibility="hidden", key="tegami")
 
 
     button_css = f"""
