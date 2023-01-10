@@ -534,7 +534,7 @@ if selector=="診療情報提供書":
         with col2:
             shohou_updown = st.radio("どのような変更ですか",
             ("増量", "減量", "抗精神病薬の追加"), horizontal=True)
-            st.write("下記には変更後の内服量を記載してください")
+        st.write("下記には変更後の内服量を記載してください")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -573,8 +573,39 @@ if selector=="診療情報提供書":
         naifuku_genkou += f"メマンチン{memantine}mgおよび"
     is_alicept = is_alicept.rstrip("および")
 
-    st.write("")
-    st.write("")
+    ###########################################################################################
+    ########　　　　　　　抗認知症薬以外の説明　　　　　###########################################
+    ###########################################################################################
+
+    sonota_naifuku = st.multiselect(
+    '抗認知症薬以外の処方を入力してください（初回・あるいは変更がある場合のみ）',
+    ['アリナミン', 'メチコバール', 'フォリアミン', 'シロスタゾール', 'バイアスピリン','プラビックス', 'その他'],
+    [])
+
+    vitamin_naifuku = ""
+    if 'アリナミン' in sonota_naifuku:
+        vitamin_naifuku += f"アリナミン・"
+    if 'メチコバール' in sonota_naifuku:
+        vitamin_naifuku += f"メチコバール・"
+    if 'フォリアミン' in sonota_naifuku:
+        vitamin_naifuku += f"フォリアミン"
+    vitamin_naifuku = vitamin_naifuku.rstrip("・")
+
+    antiplt_naifuku = ""
+    if 'シロスタゾール' in sonota_naifuku:
+        antiplt_naifuku += f"シロスタゾール・"
+    if 'バイアスピリン' in sonota_naifuku:
+        antiplt_naifuku += f"バイアスピリン・"
+    if 'プラビックス' in sonota_naifuku:
+        antiplt_naifuku += f"プラビックス"
+    antiplt_naifuku = antiplt_naifuku.rstrip("・")
+
+
+    if vitamin_naifuku != "":
+        vitamin = f"また血液検査において認知機能に関連するビタミンの欠乏が認められましたので、{vitamin_naifuku}を処方しております。"
+
+    if antiplt_naifuku != "":
+        antiplt = f"頭部単純MRA上では主幹動脈の広狭不整があり、動脈硬化性変化が疑われました。頭部MRIのFLAIRでは慢性虚血性変化が目立ち、またT2*において出血性変化はなく、その観点から（たとえば{antiplt_naifuku}等の）抗血小板薬が再梗塞予防に益するかもしれないと愚考いたしました。"
 
     ###########################################################################################
     ########　　　　　　　検査結果の解釈　　　　　　　　###########################################
@@ -650,44 +681,15 @@ if selector=="診療情報提供書":
                     shohou_touin = ""
                     shohou_irai = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用に伴う食欲不信や下痢などの消化器症状、および気管支喘息の悪化など）についてお伝えしました。当院ではなく先生から抗認知症薬の開始をいただくことを希望されております。大変お忙しいところに、また誠に厚かましいお願いとなり恐縮ではございますが、アリセプト等の抗認知症薬の処方（たとえばアリセプトであれば血中の半減期が70-80時間であるため、副作用のチェックに3mg錠1T1Xで2-3週間、問題なければ5mg錠に増量など）についてご高配を賜れますと誠にありがたく存じます。"
             
-    ###########################################################################################
-    ########　　　　　　　抗認知症薬以外の説明　　　　　###########################################
-    ###########################################################################################
-
-    sonota_naifuku = st.multiselect(
-    '抗認知症薬以外の処方を入力してください',
-    ['アリナミン', 'メチコバール', 'フォリアミン', 'シロスタゾール', 'バイアスピリン','プラビックス', 'その他'],
-    [])
-
-    vitamin_naifuku = ""
-    if 'アリナミン' in sonota_naifuku:
-        vitamin_naifuku += f"アリナミン・"
-    if 'メチコバール' in sonota_naifuku:
-        vitamin_naifuku += f"メチコバール・"
-    if 'フォリアミン' in sonota_naifuku:
-        vitamin_naifuku += f"フォリアミン"
-    vitamin_naifuku = vitamin_naifuku.rstrip("・")
-
-    antiplt_naifuku = ""
-    if 'シロスタゾール' in sonota_naifuku:
-        antiplt_naifuku += f"シロスタゾール・"
-    if 'バイアスピリン' in sonota_naifuku:
-        antiplt_naifuku += f"バイアスピリン・"
-    if 'プラビックス' in sonota_naifuku:
-        antiplt_naifuku += f"プラビックス"
-    antiplt_naifuku = antiplt_naifuku.rstrip("・")
-
-
-    if vitamin_naifuku != "":
-        vitamin = f"また血液検査において認知機能に関連するビタミンの欠乏が認められましたので、{vitamin_naifuku}を処方しております。"
-
-    if antiplt_naifuku != "":
-        antiplt = f"頭部単純MRA上では主幹動脈の広狭不整があり、動脈硬化性変化が疑われました。頭部MRIのFLAIRでは慢性虚血性変化が目立ち、またT2*において出血性変化はなく、その観点から（たとえば{antiplt_naifuku}等の）抗血小板薬が再梗塞予防に益するかもしれないと愚考いたしました。"
     
 
     ###########################################################################################
     ########　　　　　　　他院処方の調整依頼　　　　　　###########################################
     ###########################################################################################
+
+
+    st.write("")
+    st.write("")
 
     markdown = """
     ### その他の依頼について
