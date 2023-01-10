@@ -257,7 +257,7 @@ if selector=="診療情報提供書":
     with col5:
         tien = st.text_input("遅延再生", placeholder="WMS-R", key="tien")
 
-    wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", key="wmsr_comment")
+    wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", placeholder="改行は自動で修正されます", key="wmsr_comment")
     wmsr_comment = wmsr_comment.replace("\n" , "")
     tmt = st.checkbox("TMT実施済みの場合にはチェックしてください")
 
@@ -304,7 +304,7 @@ if selector=="診療情報提供書":
     """
     st.write(markdown)  
 
-    mri = st.text_area("MRI所見を入力してください", key="mri")
+    mri = st.text_area("MRI所見を入力してください", placeholder="改行は自動で修正されます", key="mri")
     mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
@@ -365,7 +365,7 @@ if selector=="診療情報提供書":
     """
     st.write(markdown)  
 
-    mra = st.text_area("MRA所見を入力してください", key="mra")
+    mra = st.text_area("MRA所見を入力してください", placeholder="改行は自動で修正されます", key="mra")
     mra_hankaku = mra.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
