@@ -300,7 +300,7 @@ if selector=="診療情報提供書":
     mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
-    keiji_henka = st.checkbox("画像所見に経時的な変化はありましたか")
+    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「あれば」チェックしてください")
     if keiji_henka == False:
         henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
 
@@ -344,6 +344,38 @@ if selector=="診療情報提供書":
             mri_follow = f"上記の通り硬膜下血腫が認められるため、"           
 
         mri_follow += f"{follow_d}に再度頭部頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
+
+    ###########################################################################################
+    ########　　　　　　　MRA検査の結果　 　　　　　　　###########################################
+    ###########################################################################################
+
+    st.write("")
+    st.write("")
+
+    markdown = """
+    ### MRA所見について
+    """
+    st.write(markdown)  
+
+    mra = st.text_area("MRA所見を入力してください", key="mra")
+    mra_hankaku = mra.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
+        .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
+    
+    keiji_henka_mra = st.checkbox("MRA画像所見に経時的な変化が「あれば」チェックしてください")
+    if keiji_henka_mra == False:
+        henka_nasi_mra = f"これら画像所見に経時的変化は明らかではありませんでした。"
+
+    is_artifact = st.checkbox("MRA画像にアーチファクトの混入はありましたか")
+    mra_artifact = f"頭部MRAでは、"
+    if is_artifact == True:
+        mra_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 1").replace("３"," 2").replace("４"," 3")\
+        .replace("５"," 4").replace("６"," 5").replace("７"," 6").replace("８"," 7").replace("９"," 8").replace("１０"," 9").replace("．",".") 
+        mra_artifact = f"頭部MRAでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
+        col1, col2 = st.columns(2)
+        with col2:
+            ugoku_artifact_mra = st.checkbox("頭が動いたことによるアーチファクトの混入ですか")
+        if ugoku_artifact_mra == True:
+            mra_artifact = f"頭部MRAでは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）、"
 
     ###########################################################################################
     ########　　　　　　　診断名の説明文　　　　　　　　###########################################
@@ -475,6 +507,10 @@ if selector=="診療情報提供書":
     ###########################################################################################
     ########　　　　　　　内服について　　　　　　　　　###########################################
     ###########################################################################################
+
+    st.write("")
+    st.write("")
+
 
     markdown = """
     ### 内服について
@@ -644,7 +680,7 @@ if selector=="診療情報提供書":
     """
     st.write(markdown)
 
-    naifuku_keizoku = st.checkbox("抗認知症薬の継続をご相談する")
+    naifuku_keizoku = st.checkbox("抗認知症薬の継続可否をご相談する")
     if naifuku_keizoku == True:
         # （アリセプト服用継続をかかりつけ医に検討してもらう場合）
         fukusayou = ""
@@ -663,16 +699,16 @@ if selector=="診療情報提供書":
     if shohou_updown == "抗精神病薬の追加":
         risperdal_soudan = f"またご本人の焦燥があり、時には疲弊してしまうことがあると、ご家族から伺いました。焦燥について環境調整ではコントロールできないような状況であると思われたため、リスパダールを処方させていただきました（ただし認知機能の低下、錐体外路症状（手足の出づらさ、飲み込みの悪さ、表情の硬さ、流涎など）の出現を恐れて、落ち着き次第に漸減・中止の予定です。"
 
-    shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服の調整をご相談する")
+    shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服（下剤など）の調整をご相談する")
     if shoukaki_yakuzai == True:
         itukara = st.text_input("服薬何日目で消化器症状が出現しましたか", placeholder="「単位」は不要です", key="itukara")
         tyusi_onegai = st.text_input("中止を依頼する薬剤名を入力してください", key="tyusi_onegai")
         gezai_soudan = f"{setumei_d}に検査結果をご説明のうえアリセプトの投薬を開始いたしました。副作用(食欲不振や下痢などの消化器症状、徐脈など)の有無の確認を行っておりましたところ、服薬{itukara}日後から消化器症状が生じたとご報告がありました。誠に僭越で大変恐縮ですが、先生からご処方の{tyusi_onegai}につきまして、内服を中止していただくようお伝えしました。症状が落ち着きましたら改めて先生にご報告申し上げたく存じます。今後もどうかよろしくご高診のほど何卒よろしくお願い申し上げます。"
 
     ketuatu_takai = st.checkbox("降圧をご相談する")
-    ketuatu = st.text_input("来院時の血圧を入力してください", 
-    placeholder="例えば「162/86」など単位は不要です", key="ketuatu")
     if ketuatu_takai == True:
+        ketuatu = st.text_input("来院時の血圧を入力してください", 
+        placeholder="例えば「162/86」など単位は不要です", key="ketuatu")
         if mri_shukketu == True:
             ketuatu_tyuui = f"微小脳出血が新たに認められましたので、血圧のコントロールは重要であり（なお服薬のアドヒアランスの問題か、あるいはたまたまかもしれませんが、当院受診時の血圧は{ketuatu}mmHgでした）先生のご診療でよくご相談されるようご本人ご家族へ上記検査結果とあわせて伝えました。"
         else:
@@ -722,7 +758,27 @@ if selector=="診療情報提供書":
     ########　　　　　　　最終出力　　　　　　　　　　　###########################################
     ###########################################################################################
 
-    tegami = atesaki_tegami + "\n" + "\n" + sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + mri_artifact + mri_hankaku + henka_nasi + mri_follow + "\n" + sindan + sindan_vad + sindan_lewy + sindan_nph  + sindan_mci + sindan_sci + sindan_psp + "\n" + kaishaku + setumei_naiyou + shohou_touin + shohou_irai + vitamin + antiplt + keizoku_soudan + senmou_soudan + risperdal_soudan + gezai_soudan + ketuatu_tyuui + dengon + "\n" + "\n" + musubi
+    tegami = atesaki_tegami + "\n" + "\n"
+
+    if sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + mri_artifact + mri_hankaku + henka_nasi + mri_follow != "":
+        tegami += sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + "\n"
+        
+    if mri_hankaku != "":
+        tegami += mri_artifact + mri_hankaku + henka_nasi + mri_follow + "\n" 
+
+    if mra_hankaku != "":
+        tegami += mra_artifact + mra_hankaku + henka_nasi_mra + "\n"
+
+    if sindan + sindan_vad + sindan_lewy + sindan_nph  + sindan_mci + sindan_sci + sindan_psp != "":
+        tegami += sindan + sindan_vad + sindan_lewy + sindan_nph  + sindan_mci + sindan_sci + sindan_psp + "\n"
+    
+    if kaishaku + setumei_naiyou + shohou_touin + shohou_irai + vitamin + antiplt + keizoku_soudan + senmou_soudan + risperdal_soudan + gezai_soudan + ketuatu_tyuui + dengon != "":
+        tegami += kaishaku + setumei_naiyou + shohou_touin + shohou_irai + vitamin + antiplt + keizoku_soudan + senmou_soudan + risperdal_soudan + gezai_soudan + ketuatu_tyuui + dengon
+
+    if musubi != "":
+        tegami += "\n" + "\n" + musubi
+
+
 
     st.write("")
     st.write("")
