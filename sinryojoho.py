@@ -582,8 +582,19 @@ if selector=="診療情報提供書":
     ['リスパダール', '抑肝散', 'クエチアピン', 'オランザピン', 'その他'],
     [])
 
+    antipsycho_naifuku = ""
+    if 'リスパダール' in kouseisin_naifuku:
+        antipsycho_naifuku += f"リスパダール・"
+    if '抑肝散' in kouseisin_naifuku:
+        antipsycho_naifuku += f"抑肝散・"
+    if 'クエチアピン' in kouseisin_naifuku:
+        antipsycho_naifuku += f"クエチアピン・"
+    if 'オランザピン' in kouseisin_naifuku:
+        antipsycho_naifuku += f"オランザピン"
+    antipsycho_naifuku = antipsycho_naifuku.rstrip("・")
+
     sonota_naifuku = st.multiselect(
-    '抗認知症薬以外の処方を入力してください（初回・あるいは変更がある場合のみ）',
+    'ビタミン剤や抗精神病薬などの処方を入力してください（初回・あるいは変更がある場合のみ）',
     ['アリナミン', 'メチコバール', 'フォリアミン', 'シロスタゾール', 'バイアスピリン','プラビックス', 'その他'],
     [])
 
@@ -604,17 +615,6 @@ if selector=="診療情報提供書":
     if 'プラビックス' in sonota_naifuku:
         antiplt_naifuku += f"プラビックス"
     antiplt_naifuku = antiplt_naifuku.rstrip("・")
-
-    antipsycho_naifuku = ""
-    if 'リスパダール' in kouseisin_naifuku:
-        antipsycho_naifuku += f"リスパダール・"
-    if '抑肝散' in kouseisin_naifuku:
-        antipsycho_naifuku += f"抑肝散・"
-    if 'クエチアピン' in kouseisin_naifuku:
-        antipsycho_naifuku += f"クエチアピン・"
-    if 'オランザピン' in kouseisin_naifuku:
-        antipsycho_naifuku += f"オランザピン"
-    antipsycho_naifuku = antipsycho_naifuku.rstrip("・")
 
     if vitamin_naifuku != "":
         vitamin = f"また血液検査において認知機能に関連するビタミンの欠乏が認められましたので、{vitamin_naifuku}を処方しております。"
