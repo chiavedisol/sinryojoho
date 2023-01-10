@@ -60,7 +60,7 @@ if selector=="診療情報提供書":
 
     # with col1:
     atesaki = st.radio("どこに送付する書類ですか",
-    ("紹介状の返書（初回）", "かかりつけ医", "新しい通院先", "その他"), 
+    ("紹介状の返書（初回）", "かかりつけ医", "新しい通院先"), 
     horizontal=True)
     col1, col2, col3 = st.columns(3)
     with col3:
@@ -99,7 +99,7 @@ if selector=="診療情報提供書":
     zensoku = st.checkbox("気管支喘息はありますか")
 
     shohou = st.radio("処方依頼について",
-    ("将来", "初回", "継続", "増量", "減量", "追加", "処方依頼なし"), 
+    ("処方依頼なし", "将来", "初回", "継続", "増量", "減量", "追加"), 
     horizontal=True)
 
     okure = st.checkbox("報告が遅れた場合にはチェックしてください")
