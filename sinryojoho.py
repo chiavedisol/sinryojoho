@@ -577,6 +577,11 @@ if selector=="診療情報提供書":
     ########　　　　　　　抗認知症薬以外の説明　　　　　###########################################
     ###########################################################################################
 
+    kouseisin_naifuku = st.multiselect(
+    '抗精神病薬などの処方を入力してください（初回・あるいは変更がある場合のみ）',
+    ['リスパダール', '抑肝散', 'クエチアピン', 'オランザピン', 'その他'],
+    [])
+
     sonota_naifuku = st.multiselect(
     '抗認知症薬以外の処方を入力してください（初回・あるいは変更がある場合のみ）',
     ['アリナミン', 'メチコバール', 'フォリアミン', 'シロスタゾール', 'バイアスピリン','プラビックス', 'その他'],
@@ -600,6 +605,16 @@ if selector=="診療情報提供書":
         antiplt_naifuku += f"プラビックス"
     antiplt_naifuku = antiplt_naifuku.rstrip("・")
 
+    antipsycho_naifuku = ""
+    if 'リスパダール' in kouseisin_naifuku:
+        antipsycho_naifuku += f"リスパダール・"
+    if '抑肝散' in kouseisin_naifuku:
+        antipsycho_naifuku += f"抑肝散・"
+    if 'クエチアピン' in kouseisin_naifuku:
+        antipsycho_naifuku += f"クエチアピン・"
+    if 'オランザピン' in kouseisin_naifuku:
+        antipsycho_naifuku += f"オランザピン"
+    antipsycho_naifuku = antipsycho_naifuku.rstrip("・")
 
     if vitamin_naifuku != "":
         vitamin = f"また血液検査において認知機能に関連するビタミンの欠乏が認められましたので、{vitamin_naifuku}を処方しております。"
@@ -713,7 +728,7 @@ if selector=="診療情報提供書":
         senmou_soudan = f"せん妄が続く場合は対策のひとつに薬剤調整があろうかと愚考いたします。例えば{tyusi_irai}の内服中止によって改善する可能性があるのかもしれません。誠に差し出がましい提案となり恐縮ですが、どうかご寛恕くださいますと幸甚です。"
     
     if shohou_updown == "抗精神病薬の追加":
-        risperdal_soudan = f"またご本人の焦燥があり、時には疲弊してしまうことがあると、ご家族から伺いました。焦燥について環境調整ではコントロールできないような状況であると思われたため、リスパダールを処方させていただきました（ただし認知機能の低下、錐体外路症状（手足の出づらさ、飲み込みの悪さ、表情の硬さ、流涎など）の出現を恐れて、落ち着き次第に漸減・中止の予定です。"
+        risperdal_soudan = f"またご本人の焦燥があり、時には疲弊してしまうことがあると、ご家族から伺いました。焦燥について環境調整ではコントロールできないような状況であると思われたため、{antipsycho_naifuku}を処方させていただきました（ただし認知機能の低下、錐体外路症状（手足の出づらさ、飲み込みの悪さ、表情の硬さ、流涎など）の出現を恐れて、落ち着き次第に漸減・中止の予定です。"
 
     shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服（下剤など）の調整をご相談する")
     if shoukaki_yakuzai == True:
