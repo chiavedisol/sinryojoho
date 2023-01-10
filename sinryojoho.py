@@ -14,6 +14,7 @@ if selector=="診療情報提供書":
     sinri_wmsr = ""
     sinri_tmt = ""
     sinri_henka = ""
+    adas_henka = ""
     mri_artifact = ""
     mri = ""
     mri_hankaku = ""
@@ -291,6 +292,14 @@ if selector=="診療情報提供書":
                 sinri_henka += f"HDS-Rについては変化がなく、MMSEには{mmse_direction}がみられました。"
             else:
                 sinri_henka += f"HDS-R・MMSEともに変化がありませんでした。"
+
+        if adas_difference != 0:
+            adas_henka = f"ADAS(抗認知症薬の効果測定)は{adas}で、前回実施と比べ{adas_direction}が示されました。"
+        else:
+            adas_henka = f"ADAS(抗認知症薬の効果測定)は{adas}で、前回実施と比べ変化はありませんでした。"
+            
+        # 。ADAS(抗認知症薬の効果測定)は〇/70で令和〇年〇月〇日実施と比べ〇点の改善（悪化）でした
+
 
     st.write("")
     st.write("")
@@ -791,8 +800,8 @@ if selector=="診療情報提供書":
 
     tegami = atesaki_tegami + "\n" + "\n"
 
-    if sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + mri_artifact + mri_hankaku + henka_nasi + mri_follow != "":
-        tegami += sinri + sinri_cesd + sinri_sdidlb + sinri_wmsr + sinri_tmt + sinri_henka + "\n"
+    if sinri + sinri_wmsr + sinri_henka + adas_henka + sinri_cesd + sinri_sdidlb + sinri_tmt != "":
+        tegami += sinri + sinri_wmsr + sinri_henka + adas_henka + sinri_cesd + sinri_sdidlb + sinri_tmt + "\n"
         
     if mri_hankaku != "":
         tegami += mri_artifact + mri_hankaku + henka_nasi + mri_follow + "\n" 
