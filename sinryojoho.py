@@ -95,8 +95,12 @@ if selector=="診療情報提供書":
             atesaki_tegami = f"このたびは大変お世話になっており、どうもありがとうございます。認知症の精査目的(新たな脳梗塞・出血の有無確認のためのMRI、抗認知症薬の効果測定のためのADAS神経心理検査等)で当院を受診されている方です。今後は先生がかかりつけになると伺いました。唐突にご連絡させていただく失礼をお許しください。{kensa_d}に{kaisuu}回目の認知症精査を実施しておりますので、検査結果を報告させていただきます。"
 
     shohou_kaisi = st.checkbox("当院で処方を開始した場合にはチェックしてください")
+    if shohou_kaisi == True:
+        col1, col2, col3 = st.columns(3)
+        with col3:
+            zensoku = st.checkbox("気管支喘息はありますか")
+
     shokai_kaisi = st.checkbox("他院に初回処方そのものを依頼する場合にはチェックしてください")
-    zensoku = st.checkbox("気管支喘息はありますか")
 
     shohou = st.radio("処方依頼について",
     ("処方依頼なし", "将来", "初回", "継続", "増量", "減量", "追加"), 
