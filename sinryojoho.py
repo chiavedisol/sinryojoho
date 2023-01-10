@@ -114,7 +114,7 @@ if selector=="診療情報提供書":
     # ("初診", "精査", "MRA"), 
     # horizontal=True)
 
-    kekka = st.checkbox("MRA結果のみを報告する場合はチェックしてください")
+    # kekka = st.checkbox("MRA結果のみを報告する場合はチェックしてください")
 
     st.write("")
     st.write("")
