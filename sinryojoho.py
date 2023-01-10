@@ -388,8 +388,6 @@ if selector=="診療情報提供書":
     is_artifact = st.checkbox("MRA画像にアーチファクトの混入はありましたか")
     mra_artifact = f"頭部MRAでは、"
     if is_artifact == True:
-        mra_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 1").replace("３"," 2").replace("４"," 3")\
-        .replace("５"," 4").replace("６"," 5").replace("７"," 6").replace("８"," 7").replace("９"," 8").replace("１０"," 9").replace("．",".") 
         mra_artifact = f"頭部MRAでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
         col1, col2 = st.columns(2)
         with col2:
