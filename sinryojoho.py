@@ -294,9 +294,9 @@ if selector=="診療情報提供書":
                 sinri_henka += f"HDS-R・MMSEともに変化がありませんでした。"
 
         if adas_difference != 0:
-            adas_henka = f"ADAS(抗認知症薬の効果測定)は{adas}/70で、前回実施と比べ{adas_direction}がありました。"
+            adas_henka = f"ADAS（抗認知症薬の効果測定）は{adas}/70で、前回実施と比べ{adas_direction}がありました。"
         else:
-            adas_henka = f"ADAS(抗認知症薬の効果測定)は{adas}/70で、前回実施と比べ変化はありませんでした。"
+            adas_henka = f"ADAS（抗認知症薬の効果測定）は{adas}/70で、前回実施と比べ変化はありませんでした。"
             
         # 。ADAS(抗認知症薬の効果測定)は〇/70で令和〇年〇月〇日実施と比べ〇点の改善（悪化）でした
 
