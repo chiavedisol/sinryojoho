@@ -401,7 +401,12 @@ if selector=="診療情報提供書":
 
     # '血管性認知症', 'レビー小体型認知症', '正常圧水頭症', 'MCI/SCI','進行性核上性麻痺'],
 
-    if kaisuu == "1":
+    markdown = """
+    ### 診断名の説明文
+    """
+    st.write(markdown)
+    riyu = st.checkbox("診断にいたった経緯を説明する文章は必要ですか")
+    if riyu == True:
 
         if 'アルツハイマー型認知症' in conclusion:
             markdown = """
