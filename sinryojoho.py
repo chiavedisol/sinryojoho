@@ -548,7 +548,7 @@ if selector=="診療情報提供書":
         col1, col2= st.columns(2)
         with col2:
             shohou_updown = st.radio("どのような変更ですか",
-            ("増量", "減量", "抗精神病薬の追加"), horizontal=True)
+            ("初回", "増量", "減量", "抗精神病薬の追加"), horizontal=True)
         st.write("下記には変更後の内服量を記載してください")
 
     col1, col2 = st.columns(2)
