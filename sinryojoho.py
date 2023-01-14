@@ -456,7 +456,7 @@ if selector=="診療情報提供書":
                 else:
                     sindan_vad = f"従いまして、認知機能の変化と、基底核の慢性虚血性変化を考慮し、血管性認知症と診断させていただきました。"
             else:
-                vad_mri = st.text_area("血管性認知症の診断に至ったMRI所見を入力してください", placeholder="「両側性視床梗塞」など体言止めで入力してください", key="vad_mri")
+                vad_mri = st.text_area("上記以外の場合は血管性認知症の診断に至ったMRI所見を入力してください", placeholder="「両側性視床梗塞」など体言止めで入力してください", key="vad_mri")
                 if 'アルツハイマー型認知症' in conclusion:
                     sindan_vad = f"また上記の通り{vad_mri}が指摘され血管性認知症の合併もあると愚考しております。"
                 else:
