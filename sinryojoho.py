@@ -594,7 +594,7 @@ if selector=="診療情報提供書":
 
     kouseisin_naifuku = st.multiselect(
     '抗精神病薬などの処方を入力してください（初回・あるいは変更がある場合のみ）',
-    ['リスパダール', '抑肝散', 'クエチアピン', 'オランザピン', 'その他'],
+    ['リスパダール', '抑肝散', 'クエチアピン', 'オランザピン', 'エビリファイ', 'その他'],
     [])
 
     antipsycho_naifuku = ""
@@ -605,7 +605,9 @@ if selector=="診療情報提供書":
     if 'クエチアピン' in kouseisin_naifuku:
         antipsycho_naifuku += f"クエチアピン・"
     if 'オランザピン' in kouseisin_naifuku:
-        antipsycho_naifuku += f"オランザピン"
+        antipsycho_naifuku += f"オランザピン・"
+    if 'エビリファイ' in kouseisin_naifuku:
+        antipsycho_naifuku += f"エビリファイ・"
     antipsycho_naifuku = antipsycho_naifuku.rstrip("・")
 
     sonota_naifuku = st.multiselect(
