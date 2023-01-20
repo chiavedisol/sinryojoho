@@ -834,7 +834,7 @@ if selector=="診療情報提供書":
     st.write("")
     st.write("")
     if 'tegami' not in st.session_state: 
-        st.session_state.tegami = tegami
+        st.session_state.tegami = ""
 
     if st.button("文章を生成します"):
         st.session_state.tegami = tegami
