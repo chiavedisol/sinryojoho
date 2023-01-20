@@ -264,12 +264,12 @@ if selector=="診療情報提供書":
 
     if kaisuu == "1":
         sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、記憶、語想起、とりわけ遅延再生領域において認知機能の低下を認めました。"
-        if cesd != "":
-            if int(cesd) >= 16:
-                sinri_cesd = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
-        if sdidlb != "":
-            if int(sdidlb) >= 16:
-                sinri_sdidlb = f"また、SDI-DLB(レビー小体型認知症のスケール、cutoff:15/16)は{sdidlb}/80でDLBが疑われました。"
+    if cesd != "":
+        if int(cesd) >= 16:
+            sinri_cesd = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
+    if sdidlb != "":
+        if int(sdidlb) >= 16:
+            sinri_sdidlb = f"また、SDI-DLB(レビー小体型認知症のスケール、cutoff:15/16)は{sdidlb}/80でDLBが疑われました。"
 
     if wmsr_comment != "":
         if tmt == False:
@@ -833,9 +833,11 @@ if selector=="診療情報提供書":
 
     st.write("")
     st.write("")
-
+    if 'tegami' not in st.session_state: 
+        st.session_state.tegami = tegami
 
     if st.button("文章を生成します"):
+        st.session_state.tegami = tegami
         # latest_iteration = st.empty()
         # bar = st.progress(0)
         # for i in range(100):
@@ -843,7 +845,7 @@ if selector=="診療情報提供書":
         #     bar.progress(i+1)
         #     time.sleep(0.01)
         # st.write("下記の文章を確認のうえ使用してください")
-        st.text_area("診療情報提供書", value=tegami, placeholder="診療情報提供書", height=800, label_visibility="hidden", key="tegami")
+    st.text_area("診療情報提供書", value=st.session_state.tegami, placeholder="診療情報提供書", height=800, label_visibility="hidden", key="tegami")
 
 
     button_css = f"""
