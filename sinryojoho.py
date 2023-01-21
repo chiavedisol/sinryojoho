@@ -19,6 +19,7 @@ if selector=="診療情報提供書":
     mri = ""
     mri_hankaku = ""
     henka_nasi = ""
+    henka_nasi_mra = ""
     mri_follow = ""
     sindan = ""
     sindan_vad = ""
