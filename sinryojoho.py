@@ -106,7 +106,7 @@ if selector=="診療情報提供書":
     if shokai_kaisi == True:
         col1, col2, col3 = st.columns(3)
         with col3:
-            zensoku = st.checkbox("気管支喘息はありますか", key="zensoku_tain")
+            zensoku_tain = st.checkbox("気管支喘息はありますか", key="zensoku_tain")
 
     shohou = st.radio("処方依頼について",
     ("処方依頼なし", "将来", "初回依頼", "継続", "増量", "減量", "追加"), 
@@ -236,7 +236,7 @@ if selector=="診療情報提供書":
             adas_direction = f"{adas_difference}点の悪化"
         st.write("ADASの変化量")
         st.write(adas_direction)
-    hantei = st.checkbox("上記の検査結果はADAS曲線の natural courseを上回りますか")
+    hantei = st.checkbox("上記の検査結果はADAS曲線の natural courseを上回りますか", key="hantei")
     
     st.write("")
     st.write("")
@@ -261,7 +261,7 @@ if selector=="診療情報提供書":
 
     wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", placeholder="改行は自動で修正されます", key="wmsr_comment")
     wmsr_comment = wmsr_comment.replace("\n" , "")
-    tmt = st.checkbox("TMT実施済みの場合にはチェックしてください")
+    tmt = st.checkbox("TMT実施済みの場合にはチェックしてください", key="tmt")
 
     if kaisuu == "1":
         sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、記憶、語想起、とりわけ遅延再生領域において認知機能の低下を認めました。"
@@ -318,11 +318,11 @@ if selector=="診療情報提供書":
     mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
-    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「無い」場合はチェックしてください")
+    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「無い」場合はチェックしてください", key="keiji_henka")
     if keiji_henka == True:
         henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
 
-    artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか")
+    artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか", key="artifact")
     mri_artifact = f"頭部単純MRIでは、"
     if artifact == True:
         mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 1").replace("３"," 2").replace("４"," 3")\
@@ -330,18 +330,18 @@ if selector=="診療情報提供書":
         mri_artifact = f"頭部単純MRIでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
         col1, col2 = st.columns(2)
         with col2:
-            ugoku_artifact = st.checkbox("頭が動いたことによるアーチファクトの混入ですか")
+            ugoku_artifact = st.checkbox("頭が動いたことによるアーチファクトの混入ですか", key="ugoku_artifact")
         if ugoku_artifact == True:
             mri_artifact = f"頭部単純MRIでは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）、"
 
     follow_d = ""
     col1, col2, col3 = st.columns(3)
     with col1:
-        mri_shukketu = st.checkbox(f"出血フォロー有り")
+        mri_shukketu = st.checkbox(f"出血フォロー有り", key="mri_shukketu")
     with col2:
-        mri_kousoku = st.checkbox(f"梗塞フォロー有り")
+        mri_kousoku = st.checkbox(f"梗塞フォロー有り", key="mri_kousoku")
     with col3:
-        mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り")
+        mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り", key="mri_koumakuka")
     if mri_shukketu or mri_kousoku or mri_koumakuka is True:
         with col3:
             follow = st.date_input("フォロー検査日程", key="follow")
@@ -379,20 +379,20 @@ if selector=="診療情報提供書":
     mra_hankaku = mra.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
         .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
     
-    keiji_henka_mra = st.checkbox("MRA画像所見に経時的な変化が「無い」場合はチェックしてください")
+    keiji_henka_mra = st.checkbox("MRA画像所見に経時的な変化が「無い」場合はチェックしてください", key="keiji_henka_mra")
     if keiji_henka_mra == True:
         if "2." in mra_hankaku:
             henka_nasi_mra = f"これら画像所見に経時的変化は明らかではありませんでした。"
         else:
             henka_nasi_mra = f"この画像所見に経時的変化は明らかではありませんでした。"
 
-    is_artifact = st.checkbox("MRA画像にアーチファクトの混入はありましたか")
+    is_artifact = st.checkbox("MRA画像にアーチファクトの混入はありましたか", key="is_artifact")
     mra_artifact = f"頭部MRAでは、"
     if is_artifact == True:
         mra_artifact = f"頭部MRAでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
         col1, col2 = st.columns(2)
         with col2:
-            ugoku_artifact_mra = st.checkbox("頭が動いたことによるアーチファクトの混入ですか")
+            ugoku_artifact_mra = st.checkbox("頭が動いたことによるアーチファクトの混入ですか", key="ugoku_artifact_mra")
         if ugoku_artifact_mra == True:
             mra_artifact = f"頭部MRAでは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）、"
 
@@ -409,7 +409,7 @@ if selector=="診療情報提供書":
     ### 診断名の説明文
     """
     st.write(markdown)
-    riyu = st.checkbox("診断にいたった経緯を説明する文章は必要ですか")
+    riyu = st.checkbox("診断にいたった経緯を説明する文章は必要ですか", key="riyu")
     if riyu == True:
 
         if 'アルツハイマー型認知症' in conclusion:
@@ -420,9 +420,9 @@ if selector=="診療情報提供書":
 
             left, right = st.columns(2)
             with left:
-                ishuku = st.checkbox("側頭葉内側の萎縮はありますか")
+                ishuku = st.checkbox("側頭葉内側の萎縮はありますか", key="ishuku")
             with right:
-                higai_ishuku = st.checkbox("中脳被蓋の萎縮や第三脳室拡大・第四脳室拡大はありますか")
+                higai_ishuku = st.checkbox("中脳被蓋の萎縮や第三脳室拡大・第四脳室拡大はありますか", key="higai_ishuku")
             if ishuku == True:
                 sindan = f"従いまして、神経心理検査では近時記憶の機能低下が指摘され、画像上もアルツハイマー型認知症や高齢者タウオパチーとして矛盾ありませんでした。現時点ではその他の疾患に特異的な症候を見出せておりませんので、アルツハイマー型認知症と診断させていただきました。"
             if ishuku == False:
@@ -436,10 +436,10 @@ if selector=="診療情報提供書":
             ### 血管性認知症について
             """
             st.write(markdown)
-            kyoketu = st.checkbox("基底核に慢性虚血性変化が目立ちますか")
+            kyoketu = st.checkbox("基底核に慢性虚血性変化が目立ちますか", key="kyoketu")
             # col1, col2, col3, col4 = st.columns(4)
             # with col1:
-            #     vad_situgo = st.checkbox(f"失語あり")
+            #     vad_situgo = st.checkbox(f"失語あり", key="vad_situgo")
             #     st.markdown('<p class="small-font">　　　言語の障害</p>', unsafe_allow_html=True)
             # with col2:
             #     vad_sikkou = st.checkbox(f"失行あり")
@@ -471,22 +471,22 @@ if selector=="診療情報提供書":
             dlb_shoujou = ""
             col1, col2, col3, col4= st.columns(4)
             with col1:
-                dlb_hokou = st.checkbox(f"認知の変動")
+                dlb_hokou = st.checkbox(f"認知の変動", key="dlb_hokou")
                 if dlb_hokou == True:
                     dlb_shoujou += "注意力低下を伴う認知の変動・"
             with col2:
-                dlb_gensi = st.checkbox(f"明らかな幻視")
+                dlb_gensi = st.checkbox(f"明らかな幻視", key="dlb_gensi")
                 if dlb_gensi == True:
                     dlb_shoujou += "明らかな幻視・"
             with col3:
-                dlb_rem = st.checkbox(f"レム睡眠行動異常")
+                dlb_rem = st.checkbox(f"レム睡眠行動異常", key="dlb_rem")
                 if dlb_rem == True:
                     dlb_shoujou += "レム睡眠行動異常・"
             with col4:
-                dlb_parkinson = st.checkbox(f"パーキンソン症状")
+                dlb_parkinson = st.checkbox(f"パーキンソン症状", key="dlb_parkinson")
                 if dlb_parkinson == True:
                     dlb_shoujou += "パーキンソン症状・"
-            dlb_jiritu = st.checkbox(f"自律神経症状（便秘・寝汗・起立性低血圧など）")
+            dlb_jiritu = st.checkbox(f"自律神経症状（便秘・寝汗・起立性低血圧など）", key="dlb_jiritu")
             if dlb_jiritu == True:
                 dlb_shoujou += "自律神経症状"
             dlb_shoujou = dlb_shoujou.strip("・")
@@ -507,7 +507,7 @@ if selector=="診療情報提供書":
             ### 正常圧水頭症について
             """
             st.write(markdown)
-            nph_merkmal = st.checkbox(f"歩行障害や失禁がありタップテストが推奨されますか")
+            nph_merkmal = st.checkbox(f"歩行障害や失禁がありタップテストが推奨されますか", key="nph_merkmal")
             if nph_merkmal == True:
                 sindan_nph = f"上記に示した画像所見の通り、正常圧水頭症の可能性を否定できず、また現時点でタップテストのメルクマールとなるような認知機能低下以外の特異的症状（歩行障害や失禁など）がうかがわれます。そのため正常圧水頭症疑いについてタップテストのご説明をさせていただきました。"
             else: 
@@ -518,7 +518,7 @@ if selector=="診療情報提供書":
             ### MCI/SCIについて
             """
             st.write(markdown)
-            mci_sci = st.checkbox(f"神経心理検査から軽度認知障害が示唆されますか")
+            mci_sci = st.checkbox(f"神経心理検査から軽度認知障害が示唆されますか", key="mci_sci")
             if mci_sci == True:
                 sindan_mci = f"従いまして、今回の検査では、積極的に認知症であることを支持する所見は得られませんでしたが、WMS-R結果および自覚的な認知機能低下を考慮して軽度認知障害（MCI）の診断としております。"
             else:
@@ -543,7 +543,7 @@ if selector=="診療情報提供書":
     ### 内服について
     """
     st.write(markdown)
-    shohou_henkou = st.checkbox("処方内容に変更がある場合にはチェックしてください")
+    shohou_henkou = st.checkbox("処方内容に変更がある場合にはチェックしてください", key="shohou_henkou")
     shohou_updown = ""
     if shohou_henkou == True:
         col1, col2= st.columns(2)
@@ -691,7 +691,7 @@ if selector=="診療情報提供書":
 
     setumei = st.date_input("結果説明の日程を入力してください", key="setumei")
     setumei_d = setumei.strftime('%Y年%m月%d日')
-    setumei_irai = st.checkbox("当院で検査結果を説明しておらず他院に説明依頼をする場合はチェックしてください")
+    setumei_irai = st.checkbox("当院で検査結果を説明しておらず他院に説明依頼をする場合はチェックしてください", key="setumei_irai")
     if setumei_irai == True:
         setumei_naiyou = f"当院へは遠方のため来院の負担があり、ご本人ご家族の希望もあり、上記の検査結果については先生からお伝えいただけますと誠にありがたく存じます。大変お手を煩わせて申し訳ありません。なにかご不明な点がございましたら、ご連絡いただければ誠にありがたく存じます。"
     
@@ -710,7 +710,7 @@ if selector=="診療情報提供書":
     if shokai_kaisi == True:
         shohou_touin = ""
         shohou_irai = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。当院ではなく先生から抗認知症薬の開始をいただくことを希望されております。大変お忙しいところに、また誠に厚かましいお願いとなり恐縮ではございますが、アリセプト等の抗認知症薬の処方（たとえばアリセプトであれば血中の半減期が70-80時間であるため、副作用のチェックに3mg錠1T1Xで2-3週間、問題なければ5mg錠に増量など）についてご高配を賜れますと誠にありがたく存じます。"
-        if zensoku == True:
+        if zensoku_tain == True:
             shohou_touin = ""
             shohou_irai = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用に伴う食欲不信や下痢などの消化器症状、および気管支喘息の悪化など）についてお伝えしました。当院ではなく先生から抗認知症薬の開始をいただくことを希望されております。大変お忙しいところに、また誠に厚かましいお願いとなり恐縮ではございますが、アリセプト等の抗認知症薬の処方（たとえばアリセプトであれば血中の半減期が70-80時間であるため、副作用のチェックに3mg錠1T1Xで2-3週間、問題なければ5mg錠に増量など）についてご高配を賜れますと誠にありがたく存じます。"
             
@@ -729,7 +729,7 @@ if selector=="診療情報提供書":
     """
     st.write(markdown)
 
-    naifuku_keizoku = st.checkbox("抗認知症薬の継続可否をご相談する")
+    naifuku_keizoku = st.checkbox("抗認知症薬の継続可否をご相談する", key="naifuku_keizoku")
     if naifuku_keizoku == True:
         # （アリセプト服用継続をかかりつけ医に検討してもらう場合）
         fukusayou = ""
@@ -740,7 +740,7 @@ if selector=="診療情報提供書":
         fukusayou = fukusayou.rstrip("、")
         keizoku_soudan = f"ご本人の体力が衰えもあり抗認知症薬継続の可否についてお尋ねがありました。{fukusayou}などがなければ、認知機能低下遅延の一助になるかもしれず（明確なエビデンスがないのですが）そういう意味で抗認知症薬の継続をしていくこともできようとも思い、服薬が可能であれば継続的に服薬するのも一法であるとお伝えしました。現時点での局面におけるエビデンスが確立されていないために、またADAS神経心理検査で認知機能の遅延効果について具体的に調べることも困難でもあり、誠に悩ましい問題であって、明確な答えはない、ともお伝えしました。ここは直観的な判断にならざるを得ないとも思いますが、先生とご相談くださるようお話し申し上げました。専門医の間でも意見の相違がある局面です。誠に勝手なお願いで恐縮に存じますが、抗認知症薬の継続・中止について、普段ご様子をご高診いただいている先生にご検討をお願い申し上げる次第です。突然のことで誠に恐縮ですが、どうか失礼をご寛恕いただけますならば幸甚です。"
 
-    senmou_yakuzai = st.checkbox("せん妄を生じうる内服の中止をご相談する")
+    senmou_yakuzai = st.checkbox("せん妄を生じうる内服の中止をご相談する", key="senmou_yakuzai")
     if senmou_yakuzai == True:
         tyusi_irai = st.text_input("中止を依頼する薬剤名を入力してください", key="tyusi_irai")
         senmou_soudan = f"せん妄が続く場合は対策のひとつに薬剤調整があろうかと愚考いたします。例えば{tyusi_irai}の内服中止によって改善する可能性があるのかもしれません。誠に差し出がましい提案となり恐縮ですが、どうかご寛恕くださいますと幸甚です。"
@@ -748,13 +748,13 @@ if selector=="診療情報提供書":
     if shohou_updown == "抗精神病薬の追加":
         risperdal_soudan = f"またご本人の焦燥があり、時には疲弊してしまうことがあると、ご家族から伺いました。焦燥について環境調整ではコントロールできないような状況であると思われたため、{antipsycho_naifuku}を処方させていただきました（ただし認知機能の低下、錐体外路症状（手足の出づらさ、飲み込みの悪さ、表情の硬さ、流涎など）の出現を恐れて、落ち着き次第に漸減・中止の予定です。"
 
-    shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服（下剤など）の調整をご相談する")
+    shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服（下剤など）の調整をご相談する", key="shoukaki_yakuzai")
     if shoukaki_yakuzai == True:
         itukara = st.text_input("服薬何日目で消化器症状が出現しましたか", placeholder="「単位」は不要です", key="itukara")
         tyusi_onegai = st.text_input("中止を依頼する薬剤名を入力してください", key="tyusi_onegai")
         gezai_soudan = f"{setumei_d}に検査結果をご説明のうえアリセプトの投薬を開始いたしました。副作用(食欲不振や下痢などの消化器症状、徐脈など)の有無の確認を行っておりましたところ、服薬{itukara}日後から消化器症状が生じたとご報告がありました。誠に僭越で大変恐縮ですが、先生からご処方の{tyusi_onegai}につきまして、内服を中止していただくようお伝えしました。症状が落ち着きましたら改めて先生にご報告申し上げたく存じます。今後もどうかよろしくご高診のほど何卒よろしくお願い申し上げます。"
 
-    ketuatu_takai = st.checkbox("降圧をご相談する")
+    ketuatu_takai = st.checkbox("降圧をご相談する", key="ketuatu_takai")
     if ketuatu_takai == True:
         ketuatu = st.text_input("来院時の血圧を入力してください", 
         placeholder="例えば「162/86」など単位は不要です", key="ketuatu")
