@@ -836,6 +836,8 @@ if selector=="診療情報提供書":
     st.write("")
     if 'tegami' not in st.session_state: 
         st.session_state.tegami = ""
+    if 'henshu' not in st.session_state: 
+        st.session_state.henshu = ""
 
     if st.button("文章を生成します"):
         st.session_state.tegami = tegami
@@ -846,8 +848,11 @@ if selector=="診療情報提供書":
         #     bar.progress(i+1)
         #     time.sleep(0.01)
         # st.write("下記の文章を確認のうえ使用してください")
-    st.text_area("診療情報提供書", value=st.session_state.tegami, placeholder="診療情報提供書", height=800, label_visibility="hidden", key="tegami")
-
+    st.session_state.henshu = st.text_area("診療情報提供書", value=st.session_state.tegami, placeholder="診療情報提供書", height=800, label_visibility="hidden", key="tegami")
+    
+    col1, col2, col3 = st.columns(3)
+    with col3:
+        st.download_button("文章の保存はこちらから", st.session_state.henshu)
 
     button_css = f"""
     <style>
