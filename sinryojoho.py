@@ -15,6 +15,7 @@ if selector=="診療情報提供書":
     sinri_tmt = ""
     sinri_henka = ""
     adas_henka = ""
+    mri_mijissi = ""
     mri_artifact = ""
     mri = ""
     mri_hankaku = ""
@@ -314,54 +315,60 @@ if selector=="診療情報提供書":
     """
     st.write(markdown)  
 
-    mri = st.text_area("MRI所見を入力してください", placeholder="改行は自動で修正されます", key="mri")
-    mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
-        .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
-    
-    keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「無い」場合はチェックしてください", key="keiji_henka")
-    if keiji_henka == True:
-        henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
+    mri_pmi = st.checkbox("ペースメーカー植え込み術後のためMRI撮像ができない場合にはチェックしてください", key="mri_jissi")
 
-    artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか", key="artifact")
-    mri_artifact = f"頭部単純MRIでは、"
-    if artifact == True:
-        mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 1").replace("３"," 2").replace("４"," 3")\
-        .replace("５"," 4").replace("６"," 5").replace("７"," 6").replace("８"," 7").replace("９"," 8").replace("１０"," 9").replace("．",".") 
-        mri_artifact = f"頭部単純MRIでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
-        col1, col2 = st.columns(2)
+    if mri_pmi == True:
+        mri_mijissi = "ペースメーカー植え込み術後のためMRI撮像はしておりません。"
+
+    if mri_pmi == False:
+        mri = st.text_area("MRI所見を入力してください", placeholder="改行は自動で修正されます", key="mri")
+        mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 2").replace("３"," 3").replace("４"," 4")\
+            .replace("５"," 5").replace("６"," 6").replace("７"," 7").replace("８"," 8").replace("９"," 9").replace("１０"," 10").replace("．",".")
+        
+        keiji_henka = st.checkbox("MRI画像所見に経時的な変化が「無い」場合はチェックしてください", key="keiji_henka")
+        if keiji_henka == True:
+            henka_nasi = f"これら画像所見に経時的変化は明らかではありませんでした。"
+
+        artifact = st.checkbox("MRI画像にアーチファクトの混入はありましたか", key="artifact")
+        mri_artifact = f"頭部単純MRIでは、"
+        if artifact == True:
+            mri_hankaku = mri.replace("\n" , "").replace("１"," 1").replace("２"," 1").replace("３"," 2").replace("４"," 3")\
+            .replace("５"," 4").replace("６"," 5").replace("７"," 6").replace("８"," 7").replace("９"," 8").replace("１０"," 9").replace("．",".") 
+            mri_artifact = f"頭部単純MRIでは（アーチファクトの混入があり以下参考所見となりますが大変申し訳ありません）、"
+            col1, col2 = st.columns(2)
+            with col2:
+                ugoku_artifact = st.checkbox("頭が動いたことによるアーチファクトの混入ですか", key="ugoku_artifact")
+            if ugoku_artifact == True:
+                mri_artifact = f"頭部単純MRIでは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）、"
+
+        follow_d = ""
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            mri_shukketu = st.checkbox(f"出血フォロー有り", key="mri_shukketu")
         with col2:
-            ugoku_artifact = st.checkbox("頭が動いたことによるアーチファクトの混入ですか", key="ugoku_artifact")
-        if ugoku_artifact == True:
-            mri_artifact = f"頭部単純MRIでは（当院の力不足から撮像中に頭位を保つことが難しくアーチファクトが混入してしまい以下参考所見となりますが大変申し訳ありません）、"
-
-    follow_d = ""
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        mri_shukketu = st.checkbox(f"出血フォロー有り", key="mri_shukketu")
-    with col2:
-        mri_kousoku = st.checkbox(f"梗塞フォロー有り", key="mri_kousoku")
-    with col3:
-        mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り", key="mri_koumakuka")
-    if mri_shukketu or mri_kousoku or mri_koumakuka is True:
+            mri_kousoku = st.checkbox(f"梗塞フォロー有り", key="mri_kousoku")
         with col3:
-            follow = st.date_input("フォロー検査日程", key="follow")
-            follow_d = follow.strftime('%Y年%m月%d日')
+            mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り", key="mri_koumakuka")
+        if mri_shukketu or mri_kousoku or mri_koumakuka is True:
+            with col3:
+                follow = st.date_input("フォロー検査日程", key="follow")
+                follow_d = follow.strftime('%Y年%m月%d日')
 
-    if follow_d != "":
-        if mri_shukketu == True:
-            mri_follow = f"上記の通り新規に微小脳出血を指摘したため、"
-            if mri_kousoku == True:
-                mri_follow = f"上記の通り新規に微小脳出血と梗塞を指摘したため、"
+        if follow_d != "":
+            if mri_shukketu == True:
+                mri_follow = f"上記の通り新規に微小脳出血を指摘したため、"
+                if mri_kousoku == True:
+                    mri_follow = f"上記の通り新規に微小脳出血と梗塞を指摘したため、"
+                    if mri_koumakuka == True:
+                        mri_follow = f"上記の通り新規に微小脳出血と梗塞を指摘し、また硬膜下血腫が認められるため、"
+            elif mri_kousoku == True:
+                mri_follow = f"上記の通り新規に梗塞を指摘したため、"
                 if mri_koumakuka == True:
-                    mri_follow = f"上記の通り新規に微小脳出血と梗塞を指摘し、また硬膜下血腫が認められるため、"
-        elif mri_kousoku == True:
-            mri_follow = f"上記の通り新規に梗塞を指摘したため、"
-            if mri_koumakuka == True:
-                mri_follow = f"上記の通り新規に梗塞を指摘し、また硬膜下血腫が認められるため、"
-        elif mri_koumakuka == True:
-            mri_follow = f"上記の通り硬膜下血腫が認められるため、"           
+                    mri_follow = f"上記の通り新規に梗塞を指摘し、また硬膜下血腫が認められるため、"
+            elif mri_koumakuka == True:
+                mri_follow = f"上記の通り硬膜下血腫が認められるため、"           
 
-        mri_follow += f"{follow_d}に再度頭部頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
+            mri_follow += f"{follow_d}に再度頭部頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
 
     ###########################################################################################
     ########　　　　　　　MRA検査の結果　 　　　　　　　###########################################
@@ -814,7 +821,10 @@ if selector=="診療情報提供書":
 
     if sinri + sinri_wmsr + sinri_henka + adas_henka + sinri_cesd + sinri_sdidlb + sinri_tmt != "":
         tegami += sinri + sinri_wmsr + sinri_henka + adas_henka + sinri_cesd + sinri_sdidlb + sinri_tmt + "\n"
-        
+
+    if mri_mijissi != "":
+        tegami += mri_mijissi + "\n" 
+
     if mri_hankaku != "":
         tegami += mri_artifact + mri_hankaku + henka_nasi + mri_follow + "\n" 
 
