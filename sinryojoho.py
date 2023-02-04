@@ -549,13 +549,13 @@ if selector=="診療情報提供書":
     ### 内服について
     """
     st.write(markdown)
-    shohou_henkou = st.checkbox("処方内容に変更がある場合にはチェックしてください", key="shohou_henkou")
+    shohou_henkou = st.checkbox("初回処方あるいは処方内容に変更がある場合にはチェックしてください", key="shohou_henkou")
     shohou_updown = ""
     if shohou_henkou == True:
         col1, col2= st.columns(2)
         with col2:
             shohou_updown = st.radio("どのような変更ですか",
-            ("初回", "増量", "減量", "抗精神病薬の追加"), horizontal=True)
+            ("初回", "増量", "減量"), horizontal=True)
         st.write("下記には変更後の内服量を記載してください")
 
     col1, col2 = st.columns(2)
@@ -751,7 +751,7 @@ if selector=="診療情報提供書":
         tyusi_irai = st.text_input("中止を依頼する薬剤名を入力してください", key="tyusi_irai")
         senmou_soudan = f"せん妄が続く場合は対策のひとつに薬剤調整があろうかと愚考いたします。例えば{tyusi_irai}の内服中止によって改善する可能性があるのかもしれません。誠に差し出がましい提案となり恐縮ですが、どうかご寛恕くださいますと幸甚です。"
     
-    if shohou_updown == "抗精神病薬の追加":
+    if antipsycho_naifuku != "":
         risperdal_soudan = f"またご本人の焦燥があり、時には疲弊してしまうことがあると、ご家族から伺いました。焦燥について環境調整ではコントロールできないような状況であると思われたため、{antipsycho_naifuku}を処方させていただきました（ただし認知機能の低下、錐体外路症状（手足の出づらさ、飲み込みの悪さ、表情の硬さ、流涎など）の出現を恐れて、落ち着き次第に漸減・中止の予定です。"
 
     shoukaki_yakuzai = st.checkbox("消化器症状に影響する内服（下剤など）の調整をご相談する", key="shoukaki_yakuzai")
