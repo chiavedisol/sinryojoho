@@ -110,7 +110,7 @@ if selector=="診療情報提供書":
             zensoku_tain = st.checkbox("気管支喘息はありますか", key="zensoku_tain")
 
     shohou = st.radio("処方依頼について",
-    ("処方依頼なし", "将来", "初回依頼", "継続", "増量", "減量", "追加"), 
+    ("処方依頼なし", "将来", "初回依頼", "継続", "増量", "減量", "切り替え"), 
     horizontal=True)
 
     okure = st.checkbox("報告が遅れた場合にはチェックしてください")
@@ -552,10 +552,10 @@ if selector=="診療情報提供書":
     shohou_henkou = st.checkbox("初回処方あるいは処方内容に変更がある場合にはチェックしてください", key="shohou_henkou")
     shohou_updown = ""
     if shohou_henkou == True:
-        col1, col2= st.columns(2)
-        with col2:
-            shohou_updown = st.radio("どのような変更ですか",
-            ("初回", "増量", "減量"), horizontal=True)
+        # col1, col2= st.columns(2)
+        # with col2:
+            # shohou_updown = st.radio("どのような変更ですか",
+            # ("初回", "増量", "減量"), horizontal=True)
         st.write("下記には変更後の内服量を記載してください")
 
     col1, col2 = st.columns(2)
