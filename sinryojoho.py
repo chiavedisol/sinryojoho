@@ -279,7 +279,7 @@ if selector=="診療情報提供書":
     tmt = st.checkbox("TMT実施済みの場合にはチェックしてください", key="tmt")
 
     if kaisuu == "1":
-        sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、記憶、語想起、とりわけ遅延再生領域において認知機能の低下を認めました。"
+        sinri = f"神経心理検査では、HDS-R{hdsr}/30、MMSE{mmse}/30で、見当識、注意/集中力、語想起、記憶とりわけ遅延再生領域において認知機能の低下を認めました。"
     if cesd != "":
         if int(cesd) >= 16:
             sinri_cesd = f"CES-D(うつの尺度、cutoff:15/16)は{cesd}/60で気分障害を認めました。"
