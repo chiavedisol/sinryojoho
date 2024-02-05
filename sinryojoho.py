@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import datetime
 
 pagelist = ["診療情報提供書","診療情報提供書 木之下先生ver"]
 selector = st.sidebar.radio("ページ選択",pagelist)
@@ -365,8 +366,11 @@ if selector=="診療情報提供書":
         mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り", key="mri_koumakuka")
     if mri_shukketu or mri_kousoku or mri_koumakuka is True:
         with col3:
+            today = datetime.date.today()
             follow = st.date_input("フォロー検査日程", key="follow")
             follow_d = follow.strftime('%Y年%m月%d日')
+            if follow > today:
+                st.write("フォロー検査日程は未来です")
 
     if follow_d != "":
         if mri_shukketu == True:
@@ -382,7 +386,10 @@ if selector=="診療情報提供書":
         elif mri_koumakuka == True:
             mri_follow = f"上記の通り硬膜下血腫が認められるため、"           
 
-        mri_follow += f"{follow_d}に再度頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
+        if not follow > today:
+            mri_follow += f"{follow_d}に再度頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
+        else:
+            mri_follow += f"{follow_d}に再度頭部単純MRIを実施し、変化や増悪の有無を確認いたします。" 
 
     ###########################################################################################
     ########　　　　　　　MRA検査の結果　 　　　　　　　###########################################
@@ -1302,8 +1309,12 @@ if selector=="診療情報提供書 木之下先生ver":
         mri_koumakuka = st.checkbox(f"硬膜下血腫フォロー有り", key="mri_koumakuka")
     if mri_shukketu or mri_kousoku or mri_koumakuka is True:
         with col3:
+            today = datetime.date.today()
             follow = st.date_input("フォロー検査日程", key="follow")
             follow_d = follow.strftime('%Y年%m月%d日')
+            if follow > today:
+                st.write("フォロー検査日程は未来です")
+
 
     if follow_d != "":
         if mri_shukketu == True:
@@ -1319,8 +1330,10 @@ if selector=="診療情報提供書 木之下先生ver":
         elif mri_koumakuka == True:
             mri_follow = f"上記の通り硬膜下血腫が認められるため、"           
 
-        mri_follow += f"{follow_d}に再度頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
-
+        if not follow > today:
+            mri_follow += f"{follow_d}に再度頭部単純MRIを実施いたしましたが、変化や増悪は認められず経過観察としております。" 
+        else:
+            mri_follow += f"{follow_d}に再度頭部単純MRIを実施し、変化や増悪の有無を確認いたします。"
     ###########################################################################################
     ########　　　　　　　MRA検査の結果　 　　　　　　　###########################################
     ###########################################################################################
