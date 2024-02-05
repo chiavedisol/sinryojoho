@@ -276,6 +276,7 @@ if selector=="診療情報提供書":
 
     wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", placeholder="改行は自動で修正されます", key="wmsr_comment")
     wmsr_comment = wmsr_comment.replace("\n" , "")
+    wmsr_comment = wmsr_comment.replace("下回った" , "下回りました").replace("認める" , "認めます").replace("認めた" , "認めました").replace("示す" , "示します").replace("示した" , "示しました").replace("示唆された" , "示唆されました").replace("がある" , "があります")
     tmt = st.checkbox("TMT実施済みの場合にはチェックしてください", key="tmt")
 
     if kaisuu == "1":
@@ -1212,6 +1213,7 @@ if selector=="診療情報提供書 木之下先生ver":
 
     wmsr_comment = st.text_area("WMS-RおよびTMTの評価を入力してください", placeholder="改行は自動で修正されます", key="wmsr_comment")
     wmsr_comment = wmsr_comment.replace("\n" , "")
+    wmsr_comment = wmsr_comment.replace("下回った" , "下回りました").replace("認める" , "認めます").replace("認めた" , "認めました").replace("示す" , "示します").replace("示した" , "示しました").replace("示唆された" , "示唆されました").replace("がある" , "があります")
     tmt = st.checkbox("TMT実施済みの場合にはチェックしてください", key="tmt")
 
     if kaisuu == "1":
