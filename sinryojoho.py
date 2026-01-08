@@ -251,7 +251,7 @@ if selector=="診療情報提供書":
             adas_direction = f"{adas_difference}点の悪化"
         st.write("ADASの変化量")
         st.write(adas_direction)
-    hantei = st.checkbox("上記の検査結果はADAS曲線の natural courseを上回りますか", key="hantei")
+    hantei = st.checkbox("上記の検査結果はADAS曲線の natural courseを上回りますか", key="hantei", value=True)
     
     st.write("")
     st.write("")
@@ -580,6 +580,10 @@ if selector=="診療情報提供書":
 
     col1, col2 = st.columns(2)
     with col1:
+        alidone = st.text_input("アリドネパッチの用量を入力してください", placeholder="「mg」は不要です", key="alidone")
+
+    col1, col2 = st.columns(2)
+    with col1:
         memary = st.text_input("メマリーの内服量を入力してください", placeholder="「mg」は不要です", key="memary")
     with col2:
         memantine = st.text_input("メマンチンの内服量を入力してください", placeholder="「mg」は不要です", key="memantine")
@@ -589,6 +593,8 @@ if selector=="診療情報提供書":
         naifuku_genkou += f"アリセプト{alicept}mgおよび"
     if donepezil != "":
         naifuku_genkou += f"ドネペジル{donepezil}mgおよび"
+    if alidone != "":
+        naifuku_genkou += f"アリドネパッチ{alidone}mgおよび"
     if memary != "":
         naifuku_genkou += f"メマリー{memary}mgおよび"
     if memantine != "":
@@ -598,6 +604,8 @@ if selector=="診療情報提供書":
     is_alicept = ""
     if alicept != "":
         is_alicept += f"アリセプト{alicept}mgおよび"
+    if alidone != "":
+        is_alicept += f"アリドネパッチ{alidone}mgおよび"
     if donepezil != "":
         is_alicept += f"ドネペジル{donepezil}mg"
     is_alicept = is_alicept.rstrip("および")
@@ -693,13 +701,13 @@ if selector=="診療情報提供書":
             if shohou_henkou == True:
                 if keiji_henka == False:
                     if shohou == "処方依頼なし":
-                        kaishaku = f"従いまして、画像上は経時的な認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。ご本人ご家族の診察においても生活上の変化が報告され、抗認知症薬を増量する時期に来ていると愚考し、{naifuku_genkou}まで増量いたしました。"
+                        kaishaku = f"従いまして、画像上は経時的な変化を認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。ご本人ご家族の診察においても生活上の変化が報告され、抗認知症薬を増量する時期に来ていると愚考し、{naifuku_genkou}まで増量いたしました。"
             # （認知症薬増量処方依頼）
                     if shohou == "増量":
-                        kaishaku = f"従いまして、画像上は経時的な認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。ご本人ご家族の診察においても生活上の変化が報告され、抗認知症薬を増量する時期に来ていると愚考され、誠に厚かましいお願いとなり恐縮ではございますが、{naifuku_genkou}に増量することをご検討いただけますか。どうかご高配のほど何卒よろしくお願い申し上げます。"
+                        kaishaku = f"従いまして、画像上は経時的な変化を認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。ご本人ご家族の診察においても生活上の変化が報告され、抗認知症薬を増量する時期に来ていると愚考され、誠に厚かましいお願いとなり恐縮ではございますが、{naifuku_genkou}に増量することをご検討いただけますか。どうかご高配のほど何卒よろしくお願い申し上げます。"
             # （認知症薬増量処方依頼）
                     if shohou == "切り替え":
-                        kaishaku = f"従いまして、画像上は経時的な認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。{kirikae_riyu}、アリセプトの継続はリスクが高まると考え、例えばメマリーに切り替え、漸増処方することをご検討いただけますか（5→10→15→20mg）。大変差し出がましく、またお手数をおかけして申し訳ありませんが、どうかご高配のほど何卒よろしくお願い申し上げます。"
+                        kaishaku = f"従いまして、画像上は経時的な変化を認めませんでしたが、神経心理検査では前回と比較して悪化がみられます。{kirikae_riyu}、アリセプトの継続はリスクが高まると考え、例えばメマリーに切り替え、漸増処方することをご検討いただけますか（5→10→15→20mg）。大変差し出がましく、またお手数をおかけして申し訳ありませんが、どうかご高配のほど何卒よろしくお願い申し上げます。"
 
 
 
@@ -722,11 +730,13 @@ if selector=="診療情報提供書":
         setumei_naiyou = f"当院へは遠方のため来院の負担があり、ご本人ご家族の希望もあり、上記の検査結果については先生からお伝えいただけますと誠にありがたく存じます。大変お手を煩わせて申し訳ありません。何かご不明な点がございましたら、ご連絡いただければ誠にありがたく存じます。"
     
     if is_alicept == "" and is_memary == "":
-        kaishaku = f"{setumei_d}に、上記検査結果をご説明し、また半年後に改めて認知機能の推移をチェックさせていただくこととしました。誠に恐縮ですが、引き続きご高診を賜りますようお願い申し上げます。"
+        kaishaku = f"{setumei_d}に、上記検査結果をご説明し、また半年後に改めて認知機能の推移をチェックさせていただくこととしました。誠に恐縮ですが貴院におかれましても引き続きご高診を賜りますようお願い申し上げます。"
 
     if shohou_kaisi == True:
         if is_alicept != "":
             shohou_touin = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。ご本人ご家族が抗認知症薬の服薬を希望されましたので、{naifuku_genkou}を処方させていただきました。食欲不振・下痢など消化器症状の副作用のモニタリングを行い、問題がないようであれば5mgまでの増量を予定しております。"
+        if is_alidone != "":
+            shohou_touin = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。ご本人ご家族が抗認知症薬の服薬を希望されましたので、{naifuku_genkou}を処方させていただきました。食欲不振・下痢など消化器症状の副作用のモニタリングを行ってまいります。"
             if zensoku == True:
                 shohou_touin = f"{setumei_d}に、ご本人とご家族へ上記検査結果と抗認知症薬の効果（認知機能の低下の遅延、ADAS検査で効果を測定することなど）・副作用（コリン作用など）についてお伝えしました。ご本人とご家族が抗認知症薬の服薬を希望されましたので、気管支喘息の状況を考慮しつつ、アリセプト3mg1錠を処方させていただきました（アリセプトは気管支喘息において慎重投与になっております）。コリン作用に伴う食欲不振・下痢などの消化器症状の他、気管支狭窄による喘息発作などの副作用のモニタリングを行う予定です。"
             if shohou == "将来":
@@ -760,7 +770,7 @@ if selector=="診療情報提供書":
         # （アリセプト服用継続をかかりつけ医に検討してもらう場合）
         fukusayou = ""
         if is_alicept != "":
-            fukusayou += "食欲低下、下痢（アリセプト）、"
+            fukusayou += "食欲低下、下痢（アリセプト）、"       
         if is_memary != "":
             fukusayou += "ふらつき、めまい(メマリー）"
         fukusayou = fukusayou.rstrip("、")
