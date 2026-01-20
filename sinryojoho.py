@@ -602,6 +602,7 @@ if selector=="診療情報提供書":
     naifuku_genkou = naifuku_genkou.rstrip("および")
 
     is_alicept = ""
+    is_alidone = ""
     if alicept != "":
         is_alicept += f"アリセプト{alicept}mgおよび"
     if alidone != "":
