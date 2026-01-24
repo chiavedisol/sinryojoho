@@ -607,6 +607,7 @@ if selector=="診療情報提供書":
         is_alicept += f"アリセプト{alicept}mgおよび"
     if alidone != "":
         is_alicept += f"アリドネパッチ{alidone}mgおよび"
+        is_alidone += f"アリドネパッチ{alidone}mg"
     if donepezil != "":
         is_alicept += f"ドネペジル{donepezil}mg"
     is_alicept = is_alicept.rstrip("および")
